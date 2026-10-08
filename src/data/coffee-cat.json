@@ -1,0 +1,1334 @@
+{
+  "_meta": {
+    "status": "UNVERIFIED — compiled from public listings on 2026-10-09; confirm every field with the cafe owner before publishing",
+    "menu_source": "magicpin online menu (store 61aba8). Delivery-platform prices can differ from in-store prices; a Zomato reviewer reported higher prices on Zomato than the printed menu.",
+    "notes": "Item names lightly normalised for spelling (e.g. 'Aglo Olio' -> 'Aglio Olio', 'Napolean' -> 'Napoleon'). Prices in INR, exclusive of any platform fees."
+  },
+  "business": {
+    "name": "The Coffee Cat",
+    "type": "Cafe",
+    "established": 2022,
+    "cuisines": [
+      "Cafe",
+      "Coffee",
+      "Chinese",
+      "Italian",
+      "Continental",
+      "Fast Food"
+    ],
+    "address": "G-07 / Shop No. 7, Ground Floor, Antriksh Forest Market, Sector 77, Noida, Uttar Pradesh 201301",
+    "landmark": "Near Sector 72/75; ~600 m from Noida Sector 76 Metro",
+    "geo": {
+      "lat": 28.5685,
+      "lng": 77.3894
+    },
+    "phone": {
+      "primary": "+91 88260 33305",
+      "alternate_listed": "+91 85271 33312 (Swiggy Dineout only — verify)"
+    },
+    "hours": {
+      "value": null,
+      "conflicting_listings": [
+        "7:00 AM - 12:00 AM",
+        "10:00 AM - 10:00 PM",
+        "10:00 AM - 10:30 PM",
+        "11:00 AM - 1:45 AM (Zomato)",
+        "till 2:00 AM (Swiggy Dineout)",
+        "9:00 AM - 9:00 PM (Mappls)"
+      ]
+    },
+    "cost_for_two_inr": {
+      "range": [
+        500,
+        750
+      ],
+      "by_platform": {
+        "magicpin": "500-600",
+        "Zomato": 600,
+        "Swiggy Dineout": 700,
+        "Justdial": 750
+      }
+    },
+    "services": [
+      "Dine-in",
+      "Takeaway",
+      "Home delivery",
+      "Table reservation",
+      "Wi-Fi",
+      "Parking (per Swiggy)"
+    ],
+    "dietary": [
+      "Veg options",
+      "Vegan options (per Justdial)",
+      "Eggless desserts"
+    ],
+    "ordering_platforms": [
+      "Zomato",
+      "Swiggy (delivery + Dineout)",
+      "magicpin"
+    ],
+    "social": {
+      "instagram": "https://www.instagram.com/thecoffeecatindia"
+    },
+    "ratings_snapshot": {
+      "Zomato dining": "3.6-3.7 (33)",
+      "Zomato delivery": "4.0 (~1,300)",
+      "Swiggy Dineout": "4.4 (363)",
+      "Justdial": "4.3 (376)",
+      "Google-based aggregate": "4.4-4.5 (~300-450)"
+    },
+    "reported_highlights": [
+      "Cold coffee",
+      "Burgers",
+      "Momos",
+      "Pizza",
+      "Pineapple upside-down cake (eggless)",
+      "Pocket-friendly prices",
+      "Cozy small cafe, young crowd"
+    ],
+    "reported_complaints": [
+      "Self-service",
+      "Mosquitoes (one review)",
+      "Delivery-app prices higher than in-store"
+    ],
+    "email": "thecoffeecat@gmail.com",
+    "free_delivery_above_inr": 300,
+    "_from_menu_card": "email, instagram handle and free delivery above Rs 300 taken from the cafe printed menu card (photo supplied by client, 2026-10-09)"
+  },
+  "menu": {
+    "item_count": 144,
+    "categories": [
+      {
+        "id": "healthy-zone",
+        "name": "Healthy Zone",
+        "sections": [
+          {
+            "id": "healthy-zone",
+            "name": "Healthy Zone",
+            "items": [
+              {
+                "id": "chicken-steak-150-gm-with-sauteed-veggies",
+                "name": "Chicken Steak (150 gm) with Sauteed Veggies",
+                "type": "non-veg",
+                "price": 230,
+                "recommended": true
+              },
+              {
+                "id": "stuffed-chicken-5-pcs-with-sauteed-veggies",
+                "name": "Stuffed Chicken (5 pcs) with Sauteed Veggies",
+                "type": "non-veg",
+                "price": 230,
+                "recommended": false
+              },
+              {
+                "id": "grilled-paneer-150-gm-with-sauteed-veggies",
+                "name": "Grilled Paneer (150 gm) with Sauteed Veggies",
+                "type": "veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "club-sandwich",
+                "name": "Club Sandwich",
+                "type": "veg",
+                "price": 190,
+                "recommended": true
+              },
+              {
+                "id": "coleslaw-sandwich",
+                "name": "Coleslaw Sandwich",
+                "type": "veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "boiled-chicken-150-gm",
+                "name": "Boiled Chicken (150 gm)",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": true
+              },
+              {
+                "id": "scrambled-eggs-with-toast",
+                "name": "Scrambled Eggs with Toast",
+                "type": "egg",
+                "price": 180,
+                "recommended": false
+              },
+              {
+                "id": "egg-sandwich",
+                "name": "Egg Sandwich",
+                "type": "egg",
+                "price": 170,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pizza-pasta",
+        "name": "Pizza & Pasta",
+        "sections": [
+          {
+            "id": "veg-pizza-9",
+            "name": "Veg Pizza (9\")",
+            "items": [
+              {
+                "id": "margherita-pizza",
+                "name": "Margherita Pizza",
+                "type": "veg",
+                "price": 210,
+                "recommended": false
+              },
+              {
+                "id": "farmers-favourite-pizza",
+                "name": "Farmers Favourite Pizza",
+                "type": "veg",
+                "price": 230,
+                "recommended": true
+              },
+              {
+                "id": "mediterranean-delight-pizza",
+                "name": "Mediterranean Delight Pizza",
+                "type": "veg",
+                "price": 240,
+                "recommended": true
+              },
+              {
+                "id": "mushroom-corn-pizza",
+                "name": "Mushroom Corn Pizza",
+                "type": "veg",
+                "price": 240,
+                "recommended": false
+              },
+              {
+                "id": "cottage-cheese-crumbles-pizza",
+                "name": "Cottage Cheese Crumbles Pizza",
+                "type": "veg",
+                "price": 250,
+                "recommended": false
+              },
+              {
+                "id": "paneer-tikka-pizza",
+                "name": "Paneer Tikka Pizza",
+                "type": "veg",
+                "price": 260,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "non-veg-pizza-9",
+            "name": "Non-Veg Pizza (9\")",
+            "items": [
+              {
+                "id": "bbq-chicken-pizza",
+                "name": "BBQ Chicken Pizza",
+                "type": "non-veg",
+                "price": 260,
+                "recommended": true
+              },
+              {
+                "id": "chilli-chicken-pizza",
+                "name": "Chilli Chicken Pizza",
+                "type": "non-veg",
+                "price": 260,
+                "recommended": true
+              },
+              {
+                "id": "butter-chicken-pizza",
+                "name": "Butter Chicken Pizza",
+                "type": "non-veg",
+                "price": 270,
+                "recommended": false
+              },
+              {
+                "id": "chicken-seekh-pizza",
+                "name": "Chicken Seekh Pizza",
+                "type": "non-veg",
+                "price": 285,
+                "recommended": false
+              },
+              {
+                "id": "chicken-quattro-pizza",
+                "name": "Chicken Quattro Pizza",
+                "type": "non-veg",
+                "price": 290,
+                "recommended": false
+              },
+              {
+                "id": "mutton-seekh-pizza",
+                "name": "Mutton Seekh Pizza",
+                "type": "non-veg",
+                "price": 295,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "veg-pasta",
+            "name": "Veg Pasta",
+            "items": [
+              {
+                "id": "penne-red-sauce-pasta",
+                "name": "Penne Red Sauce Pasta",
+                "type": "veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "creamy-white-pasta",
+                "name": "Creamy White Pasta",
+                "type": "veg",
+                "price": 210,
+                "recommended": true
+              },
+              {
+                "id": "napoleon-mix-sauce-pasta",
+                "name": "Napoleon (Mix Sauce) Pasta",
+                "type": "veg",
+                "price": 210,
+                "recommended": true
+              },
+              {
+                "id": "spaghetti-white-sauce-pasta",
+                "name": "Spaghetti White Sauce Pasta",
+                "type": "veg",
+                "price": 215,
+                "recommended": false
+              },
+              {
+                "id": "spaghetti-red-sauce-pasta",
+                "name": "Spaghetti Red Sauce Pasta",
+                "type": "veg",
+                "price": 220,
+                "recommended": true
+              },
+              {
+                "id": "spaghetti-aglio-olio-pasta",
+                "name": "Spaghetti Aglio Olio Pasta",
+                "type": "veg",
+                "price": 225,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "non-veg-pasta",
+            "name": "Non-Veg Pasta",
+            "items": [
+              {
+                "id": "chicken-penne-red-sauce-pasta",
+                "name": "Chicken Penne Red Sauce Pasta",
+                "type": "non-veg",
+                "price": 245,
+                "recommended": false
+              },
+              {
+                "id": "chicken-creamy-white-pasta",
+                "name": "Chicken Creamy White Pasta",
+                "type": "non-veg",
+                "price": 250,
+                "recommended": false
+              },
+              {
+                "id": "chicken-napoleon-mix-sauce-pasta",
+                "name": "Chicken Napoleon (Mix Sauce) Pasta",
+                "type": "non-veg",
+                "price": 250,
+                "recommended": false
+              },
+              {
+                "id": "chicken-spaghetti-white-sauce-pasta",
+                "name": "Chicken Spaghetti White Sauce Pasta",
+                "type": "non-veg",
+                "price": 250,
+                "recommended": false
+              },
+              {
+                "id": "chicken-spaghetti-red-sauce-pasta",
+                "name": "Chicken Spaghetti Red Sauce Pasta",
+                "type": "non-veg",
+                "price": 260,
+                "recommended": false
+              },
+              {
+                "id": "chicken-spaghetti-aglio-olio-pasta",
+                "name": "Chicken Spaghetti Aglio Olio Pasta",
+                "type": "non-veg",
+                "price": 270,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "burgers-sandwiches",
+        "name": "Burgers & Sandwiches",
+        "sections": [
+          {
+            "id": "veg-burgers",
+            "name": "Veg Burgers",
+            "items": [
+              {
+                "id": "aloo-tikki-burger",
+                "name": "Aloo Tikki Burger",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "crispy-veggie-burger",
+                "name": "Crispy Veggie Burger",
+                "type": "veg",
+                "price": 170,
+                "recommended": false
+              },
+              {
+                "id": "spicy-paneer-burger",
+                "name": "Spicy Paneer Burger",
+                "type": "veg",
+                "price": 185,
+                "recommended": true
+              },
+              {
+                "id": "premium-paneer-burger",
+                "name": "Premium Paneer Burger",
+                "type": "veg",
+                "price": 195,
+                "recommended": true
+              },
+              {
+                "id": "double-decker-veg-burger",
+                "name": "Double Decker Veg Burger",
+                "type": "veg",
+                "price": 215,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "non-veg-burgers",
+            "name": "Non-Veg Burgers",
+            "items": [
+              {
+                "id": "egg-burger",
+                "name": "Egg Burger",
+                "type": "egg",
+                "price": 170,
+                "recommended": false
+              },
+              {
+                "id": "classic-chicken-burger",
+                "name": "Classic Chicken Burger",
+                "type": "non-veg",
+                "price": 190,
+                "recommended": false
+              },
+              {
+                "id": "butter-chicken-burger",
+                "name": "Butter Chicken Burger",
+                "type": "non-veg",
+                "price": 190,
+                "recommended": false
+              },
+              {
+                "id": "crunchy-chicken-burger",
+                "name": "Crunchy Chicken Burger",
+                "type": "non-veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "double-decker-chicken-burger",
+                "name": "Double Decker Chicken Burger",
+                "type": "non-veg",
+                "price": 225,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "veg-sandwiches",
+            "name": "Veg Sandwiches",
+            "items": [
+              {
+                "id": "veg-italian-sandwich",
+                "name": "Veg Italian Sandwich",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "spinach-corn-sandwich",
+                "name": "Spinach Corn Sandwich",
+                "type": "veg",
+                "price": 155,
+                "recommended": false
+              },
+              {
+                "id": "olive-cheese-sandwich",
+                "name": "Olive & Cheese Sandwich",
+                "type": "veg",
+                "price": 155,
+                "recommended": false
+              },
+              {
+                "id": "cheese-corn-sandwich",
+                "name": "Cheese Corn Sandwich",
+                "type": "veg",
+                "price": 155,
+                "recommended": false
+              },
+              {
+                "id": "paneer-tikka-sandwich",
+                "name": "Paneer Tikka Sandwich",
+                "type": "veg",
+                "price": 180,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "non-veg-sandwiches",
+            "name": "Non-Veg Sandwiches",
+            "items": [
+              {
+                "id": "italian-chicken-sandwich",
+                "name": "Italian Chicken Sandwich",
+                "type": "non-veg",
+                "price": 185,
+                "recommended": false
+              },
+              {
+                "id": "classic-chicken-sandwich",
+                "name": "Classic Chicken Sandwich",
+                "type": "non-veg",
+                "price": 190,
+                "recommended": false
+              },
+              {
+                "id": "chicken-salami-sandwich",
+                "name": "Chicken Salami Sandwich",
+                "type": "non-veg",
+                "price": 190,
+                "recommended": false
+              },
+              {
+                "id": "butter-chicken-sandwich",
+                "name": "Butter Chicken Sandwich",
+                "type": "non-veg",
+                "price": 195,
+                "recommended": false
+              },
+              {
+                "id": "chicken-tikka-sandwich",
+                "name": "Chicken Tikka Sandwich",
+                "type": "non-veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "chicken-seekh-sandwich",
+                "name": "Chicken Seekh Sandwich",
+                "type": "non-veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "mutton-seekh-sandwich",
+                "name": "Mutton Seekh Sandwich",
+                "type": "non-veg",
+                "price": 210,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "munchies",
+        "name": "Munchies",
+        "sections": [
+          {
+            "id": "munchies",
+            "name": "Munchies",
+            "items": [
+              {
+                "id": "french-fries",
+                "name": "French Fries",
+                "type": "veg",
+                "price": 100,
+                "recommended": false
+              },
+              {
+                "id": "peri-peri-fries",
+                "name": "Peri Peri Fries",
+                "type": "veg",
+                "price": 120,
+                "recommended": true
+              },
+              {
+                "id": "tomchetta",
+                "name": "Tomchetta",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "garlic-bread",
+                "name": "Garlic Bread",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "chicken-popcorn",
+                "name": "Chicken Popcorn",
+                "type": "non-veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "chicken-nuggets",
+                "name": "Chicken Nuggets",
+                "type": "non-veg",
+                "price": 170,
+                "recommended": true
+              },
+              {
+                "id": "chicken-fingers",
+                "name": "Chicken Fingers",
+                "type": "non-veg",
+                "price": 170,
+                "recommended": false
+              },
+              {
+                "id": "chilli-cheese-toast",
+                "name": "Chilli Cheese Toast",
+                "type": "veg",
+                "price": 170,
+                "recommended": false
+              },
+              {
+                "id": "cheese-garlic-bread",
+                "name": "Cheese Garlic Bread",
+                "type": "veg",
+                "price": 170,
+                "recommended": false
+              },
+              {
+                "id": "chilli-potato",
+                "name": "Chilli Potato",
+                "type": "veg",
+                "price": 180,
+                "recommended": false
+              },
+              {
+                "id": "honey-chilli-potato",
+                "name": "Honey Chilli Potato",
+                "type": "veg",
+                "price": 190,
+                "recommended": false
+              },
+              {
+                "id": "chicken-cheese-garlic-bread",
+                "name": "Chicken Cheese Garlic Bread",
+                "type": "non-veg",
+                "price": 190,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "starters",
+        "name": "Starters",
+        "sections": [
+          {
+            "id": "starters",
+            "name": "Starters",
+            "items": [
+              {
+                "id": "veg-spring-roll",
+                "name": "Veg Spring Roll",
+                "type": "veg",
+                "price": 200,
+                "recommended": false
+              },
+              {
+                "id": "chilli-mushroom-dry",
+                "name": "Chilli Mushroom Dry",
+                "type": "veg",
+                "price": 210,
+                "recommended": false
+              },
+              {
+                "id": "chilli-paneer-dry",
+                "name": "Chilli Paneer Dry",
+                "type": "veg",
+                "price": 210,
+                "recommended": false
+              },
+              {
+                "id": "non-veg-spring-roll",
+                "name": "Non-Veg Spring Roll",
+                "type": "non-veg",
+                "price": 215,
+                "recommended": false
+              },
+              {
+                "id": "chilli-mushroom-gravy",
+                "name": "Chilli Mushroom Gravy",
+                "type": "veg",
+                "price": 220,
+                "recommended": false
+              },
+              {
+                "id": "chilli-paneer-gravy",
+                "name": "Chilli Paneer Gravy",
+                "type": "veg",
+                "price": 220,
+                "recommended": false
+              },
+              {
+                "id": "chilli-chicken-dry",
+                "name": "Chilli Chicken Dry",
+                "type": "non-veg",
+                "price": 220,
+                "recommended": false
+              },
+              {
+                "id": "chilli-chicken-gravy",
+                "name": "Chilli Chicken Gravy",
+                "type": "non-veg",
+                "price": 230,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "momos",
+        "name": "Momos",
+        "sections": [
+          {
+            "id": "momos",
+            "name": "Momos",
+            "items": [
+              {
+                "id": "veg-steam-momos",
+                "name": "Veg Steam Momos",
+                "type": "veg",
+                "price": 130,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "veg-fried-momos",
+                "name": "Veg Fried Momos",
+                "type": "veg",
+                "price": 145,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "paneer-steam-momos",
+                "name": "Paneer Steam Momos",
+                "type": "veg",
+                "price": 150,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "chicken-steam-momos",
+                "name": "Chicken Steam Momos",
+                "type": "non-veg",
+                "price": 150,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "veg-kurkure-momos",
+                "name": "Veg Kurkure Momos",
+                "type": "veg",
+                "price": 150,
+                "recommended": true,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "chicken-fried-momos",
+                "name": "Chicken Fried Momos",
+                "type": "non-veg",
+                "price": 165,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "paneer-fried-momos",
+                "name": "Paneer Fried Momos",
+                "type": "veg",
+                "price": 165,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "paneer-kurkure-momos",
+                "name": "Paneer Kurkure Momos",
+                "type": "veg",
+                "price": 180,
+                "recommended": false,
+                "quantity": "6 pcs"
+              },
+              {
+                "id": "chicken-kurkure-momos",
+                "name": "Chicken Kurkure Momos",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": true,
+                "quantity": "6 pcs"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "noodles",
+        "name": "Noodles",
+        "sections": [
+          {
+            "id": "veg-noodles",
+            "name": "Veg Noodles",
+            "items": [
+              {
+                "id": "veg-hakka-noodles",
+                "name": "Veg Hakka Noodles",
+                "type": "veg",
+                "price": 185,
+                "recommended": true
+              },
+              {
+                "id": "veg-chilli-garlic-noodles",
+                "name": "Veg Chilli Garlic Noodles",
+                "type": "veg",
+                "price": 185,
+                "recommended": true
+              },
+              {
+                "id": "veg-schezwan-noodles",
+                "name": "Veg Schezwan Noodles",
+                "type": "veg",
+                "price": 185,
+                "recommended": false
+              },
+              {
+                "id": "thele-wali-chowmein",
+                "name": "Thele Wali Chowmein",
+                "type": "veg",
+                "price": 185,
+                "recommended": true
+              }
+            ]
+          },
+          {
+            "id": "non-veg-noodles",
+            "name": "Non-Veg Noodles",
+            "items": [
+              {
+                "id": "egg-noodles",
+                "name": "Egg Noodles",
+                "type": "egg",
+                "price": 190,
+                "recommended": false
+              },
+              {
+                "id": "chicken-hakka-noodles",
+                "name": "Chicken Hakka Noodles",
+                "type": "non-veg",
+                "price": 220,
+                "recommended": true
+              },
+              {
+                "id": "chicken-chilli-garlic-noodles",
+                "name": "Chicken Chilli Garlic Noodles",
+                "type": "non-veg",
+                "price": 220,
+                "recommended": true
+              },
+              {
+                "id": "chicken-schezwan-noodles",
+                "name": "Chicken Schezwan Noodles",
+                "type": "non-veg",
+                "price": 220,
+                "recommended": false
+              },
+              {
+                "id": "chicken-thele-wali-chowmein",
+                "name": "Chicken Thele Wali Chowmein",
+                "type": "non-veg",
+                "price": 220,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "soups",
+        "name": "Soups",
+        "sections": [
+          {
+            "id": "veg-soups",
+            "name": "Veg Soups",
+            "items": [
+              {
+                "id": "veg-clear-soup",
+                "name": "Veg Clear Soup",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "veg-sweet-corn-soup",
+                "name": "Veg Sweet Corn Soup",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "veg-hot-sour-soup",
+                "name": "Veg Hot & Sour Soup",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "veg-manchow-soup",
+                "name": "Veg Manchow Soup",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "ghar-wala-soup",
+                "name": "Ghar Wala Soup",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "tomato-basil-soup",
+                "name": "Tomato Basil Soup",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "veg-lemon-coriander-soup",
+                "name": "Veg Lemon Coriander Soup",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "tomato-spinach-soup",
+                "name": "Tomato Spinach Soup",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              },
+              {
+                "id": "cream-of-mushroom-soup",
+                "name": "Cream of Mushroom Soup",
+                "type": "veg",
+                "price": 160,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "non-veg-soups",
+            "name": "Non-Veg Soups",
+            "items": [
+              {
+                "id": "chicken-manchow-soup",
+                "name": "Chicken Manchow Soup",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": false
+              },
+              {
+                "id": "cream-of-chicken-soup",
+                "name": "Cream of Chicken Soup",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": false
+              },
+              {
+                "id": "chicken-lemon-coriander-soup",
+                "name": "Chicken Lemon Coriander Soup",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": false
+              },
+              {
+                "id": "chicken-hot-sour-soup",
+                "name": "Chicken Hot & Sour Soup",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": false
+              },
+              {
+                "id": "chicken-clear-soup",
+                "name": "Chicken Clear Soup",
+                "type": "non-veg",
+                "price": 180,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "coffee",
+        "name": "Coffee",
+        "sections": [
+          {
+            "id": "hot-coffee",
+            "name": "Hot Coffee",
+            "items": [
+              {
+                "id": "eye-opener-espresso",
+                "name": "Eye Opener Espresso",
+                "type": "veg",
+                "price": 80,
+                "recommended": false,
+                "quantity": "30 ml"
+              },
+              {
+                "id": "cafe-americano",
+                "name": "Cafe Americano",
+                "type": "veg",
+                "price": 100,
+                "recommended": false
+              },
+              {
+                "id": "double-espresso",
+                "name": "Double Espresso",
+                "type": "veg",
+                "price": 120,
+                "recommended": false,
+                "quantity": "60 ml"
+              },
+              {
+                "id": "macchiato",
+                "name": "Macchiato",
+                "type": "veg",
+                "price": 120,
+                "recommended": false
+              },
+              {
+                "id": "cappuccino",
+                "name": "Cappuccino",
+                "type": "veg",
+                "price": 130,
+                "recommended": true
+              },
+              {
+                "id": "cafe-latte",
+                "name": "Cafe Latte",
+                "type": "veg",
+                "price": 130,
+                "recommended": true
+              },
+              {
+                "id": "hot-chocolate",
+                "name": "Hot Chocolate",
+                "type": "veg",
+                "price": 140,
+                "recommended": true
+              },
+              {
+                "id": "cinnamon-cafe-latte",
+                "name": "Cinnamon Cafe Latte",
+                "type": "veg",
+                "price": 140,
+                "recommended": false
+              },
+              {
+                "id": "caramel-cappuccino",
+                "name": "Caramel Cappuccino",
+                "type": "veg",
+                "price": 150,
+                "recommended": true
+              },
+              {
+                "id": "cafe-mocha",
+                "name": "Cafe Mocha",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "inverted-cappuccino",
+                "name": "Inverted Cappuccino",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              },
+              {
+                "id": "flat-white",
+                "name": "Flat White",
+                "type": "veg",
+                "price": 150,
+                "recommended": false
+              }
+            ]
+          },
+          {
+            "id": "iced-coffee-non-blended",
+            "name": "Iced Coffee (Non-Blended)",
+            "items": [
+              {
+                "id": "iced-mocha",
+                "name": "Iced Mocha",
+                "type": "veg",
+                "price": 130,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "iced-espresso",
+                "name": "Iced Espresso",
+                "type": "veg",
+                "price": 130,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "iced-latte",
+                "name": "Iced Latte",
+                "type": "veg",
+                "price": 130,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "iced-americano",
+                "name": "Iced Americano",
+                "type": "veg",
+                "price": 140,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "double-shot-on-ice",
+                "name": "Double Shot on Ice",
+                "type": "veg",
+                "price": 150,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "cinnamon-iced-latte",
+                "name": "Cinnamon Iced Latte",
+                "type": "veg",
+                "price": 150,
+                "recommended": false,
+                "quantity": "300 ml"
+              }
+            ]
+          },
+          {
+            "id": "cold-coffee-frappes",
+            "name": "Cold Coffee & Frappes",
+            "items": [
+              {
+                "id": "cold-coffee",
+                "name": "Cold Coffee",
+                "type": "veg",
+                "price": 130,
+                "recommended": true,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "choco-frappe",
+                "name": "Choco Frappe",
+                "type": "veg",
+                "price": 150,
+                "recommended": true,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "caramel-frappe",
+                "name": "Caramel Frappe",
+                "type": "veg",
+                "price": 150,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "dark-frappe",
+                "name": "Dark Frappe",
+                "type": "veg",
+                "price": 150,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "devil-s-frappe",
+                "name": "Devil's Frappe",
+                "type": "veg",
+                "price": 160,
+                "recommended": true,
+                "quantity": "300 ml"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "drinks",
+        "name": "Drinks",
+        "sections": [
+          {
+            "id": "shakes-refreshers",
+            "name": "Shakes & Refreshers",
+            "items": [
+              {
+                "id": "mint-lemonade",
+                "name": "Mint Lemonade",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "lemon-iced-tea",
+                "name": "Lemon Iced Tea",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "cool-blue",
+                "name": "Cool Blue",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "orange-spritzer",
+                "name": "Orange Spritzer",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "oreo-milkshake",
+                "name": "Oreo Milkshake",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "saffron-milkshake",
+                "name": "Saffron Milkshake",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "strawberry-milkshake",
+                "name": "Strawberry Milkshake",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              },
+              {
+                "id": "mango-milkshake",
+                "name": "Mango Milkshake",
+                "type": "veg",
+                "price": 160,
+                "recommended": false,
+                "quantity": "300 ml"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "desserts",
+        "name": "Desserts",
+        "sections": [
+          {
+            "id": "desserts",
+            "name": "Desserts",
+            "items": [
+              {
+                "id": "walnut-brownie",
+                "name": "Walnut Brownie",
+                "type": "veg",
+                "price": 120,
+                "recommended": true
+              },
+              {
+                "id": "almond-choco-lava-cake",
+                "name": "Almond Choco Lava Cake",
+                "type": "veg",
+                "price": 130,
+                "recommended": false
+              },
+              {
+                "id": "pineapple-upside-down-cake",
+                "name": "Pineapple Upside Down Cake",
+                "type": "veg",
+                "price": 130,
+                "recommended": false,
+                "note": "eggless per a customer review"
+              },
+              {
+                "id": "banana-walnut-cake",
+                "name": "Banana Walnut Cake",
+                "type": "egg",
+                "price": 130,
+                "recommended": false
+              },
+              {
+                "id": "apple-pie",
+                "name": "Apple Pie",
+                "type": "veg",
+                "price": 130,
+                "recommended": false
+              },
+              {
+                "id": "walnut-brownie-with-hot-chocolate",
+                "name": "Walnut Brownie with Hot Chocolate",
+                "type": "veg",
+                "price": 145,
+                "recommended": false
+              },
+              {
+                "id": "walnut-brownie-with-hot-chocolate-vanilla-ice-cream",
+                "name": "Walnut Brownie with Hot Chocolate & Vanilla Ice Cream",
+                "type": "veg",
+                "price": 155,
+                "recommended": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
