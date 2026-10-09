@@ -7,6 +7,7 @@ import { cartCount, isOpenNow, useHydrated, useStore } from "@/lib/store";
 import { DishRow } from "./dish-row";
 import { ChevronRight } from "./icons";
 import { FilterBar, noFilters, type Filters } from "./menu-filters";
+import { scrollToElement } from "./motion/smooth-scroll";
 
 function filterCategories(filters: Filters): MenuCategory[] {
   const q = filters.query.trim().toLowerCase();
@@ -56,7 +57,7 @@ export function MenuBrowser() {
 
   const jumpTo = (id: string) => {
     setSheetOpen(false);
-    document.getElementById(`cat-${id}`)?.scrollIntoView();
+    scrollToElement(document.getElementById(`cat-${id}`));
   };
 
   return (
@@ -112,7 +113,7 @@ export function MenuBrowser() {
                 else sectionRefs.current.delete(c.id);
               }}
               aria-labelledby={`h-${c.id}`}
-              className="scroll-mt-36 border-b-8 border-surface pt-6 last:border-b-0"
+              className="border-b-8 border-surface pt-6 last:border-b-0"
             >
               <div className="flex items-baseline justify-between gap-4">
                 <h2 id={`h-${c.id}`} className="font-display text-xl font-bold">

@@ -72,7 +72,7 @@ export default async function DishPage({ params }: PageProps<"/dish/[id]">) {
       </nav>
 
       <div className="mt-4 grid gap-6 md:grid-cols-2 md:gap-10">
-        <figure>
+        <figure className="pdp-photo">
           <DishImage
             id={id}
             name={item.name}

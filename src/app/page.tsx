@@ -1,9 +1,15 @@
 import { business } from "@/lib/menu";
 import { RestaurantHeader } from "@/components/restaurant-header";
-import { HomeSections } from "@/components/home-sections";
+import { BestsellerRail, CategoryTiles, FavouritesCoverflow } from "@/components/home-sections";
 import { CartBar } from "@/components/cart-bar";
 import { PrototypeNotice } from "@/components/prototype-notice";
 import { CafePhotos } from "@/components/cafe-photos";
+import { HomeHero } from "@/components/motion/home-hero";
+import { StorySection } from "@/components/motion/story-section";
+import { StatsStrip } from "@/components/motion/stats-strip";
+import { PromiseCards } from "@/components/motion/promise-cards";
+import { VisitNight } from "@/components/motion/visit-night";
+import { FloatingCta } from "@/components/motion/floating-cta";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -31,10 +37,20 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <HomeHero />
       <PrototypeNotice />
       <RestaurantHeader />
-      <HomeSections />
+      <FavouritesCoverflow />
+      <StorySection />
+      <StatsStrip />
+      <div className="space-y-20 pt-20 pb-24">
+        <CategoryTiles />
+        <PromiseCards />
+        <BestsellerRail />
+      </div>
+      <VisitNight />
       <CafePhotos />
+      <FloatingCta />
       <CartBar />
     </>
   );

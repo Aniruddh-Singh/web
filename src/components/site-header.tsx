@@ -7,8 +7,8 @@ const navLink = "whitespace-nowrap rounded-lg px-3 py-2 text-muted transition-co
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-paper">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+    <header className="site-header sticky top-0 z-40 border-b border-line bg-paper">
+      <div className="site-header-inner mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
         <Link href="/" aria-label="The Coffee Cat home">
           <Wordmark />
         </Link>

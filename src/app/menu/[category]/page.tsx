@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { categories, countItems, getCategory, imageForCategory } from "@/lib/menu";
@@ -7,6 +6,7 @@ import { CategoryListing } from "@/components/category-listing";
 import { ClosedNotice } from "@/components/menu-browser";
 import { CartBar } from "@/components/cart-bar";
 import { ChevronRight } from "@/components/icons";
+import { ParallaxImage } from "@/components/motion/parallax-image";
 
 export function generateStaticParams() {
   return categories.map((c) => ({ category: c.id }));
@@ -39,7 +39,7 @@ export default async function CategoryPage({ params }: PageProps<"/menu/[categor
       </nav>
 
       <header className="relative mt-4 flex h-40 items-end overflow-hidden rounded-2xl sm:h-48">
-        <Image src={imageForCategory(category.id)} alt="" fill priority sizes="(min-width: 1152px) 1120px, 100vw" className="object-cover" />
+        <ParallaxImage src={imageForCategory(category.id)} sizes="(min-width: 1152px) 1120px, 100vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
         <div className="relative p-5 text-paper">
           <h1 className="font-display text-3xl font-extrabold sm:text-4xl">{category.name}</h1>
