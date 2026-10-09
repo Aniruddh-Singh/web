@@ -26,35 +26,45 @@ const slides: { src: StaticImageData; alt: string; position?: string }[] = [
 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${business.geo.lat},${business.geo.lng}`;
 
-function HeroMedia({ playing }: { playing: boolean }) {
+/**
+ * Photos crossfade every few seconds. The slow zoom runs continuously on every slide and is only
+ * paused (never removed) when the hero is off screen or motion is reduced, so it can't snap back.
+ * Faded-out slides are hidden after their fade so the browser stops painting them.
+ */
+function HeroMedia({ still, playingRef }: { still: boolean; playingRef: React.RefObject<boolean> }) {
   const [active, setActive] = useState(0);
   useEffect(() => {
-    if (!playing) return;
-    const t = window.setInterval(() => setActive((i) => (i + 1) % slides.length), 5200);
+    if (still) return;
+    const t = window.setInterval(() => {
+      if (playingRef.current) setActive((i) => (i + 1) % slides.length);
+    }, 5200);
     return () => window.clearInterval(t);
-  }, [playing]);
+  }, [still, playingRef]);
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-ink">
-      {slides.map((s, i) => (
-        <div
-          key={s.src.src}
-          aria-hidden={i !== active}
-          className="absolute inset-0 transition-opacity duration-[1400ms] ease-out"
-          style={{ opacity: i === active ? 1 : 0 }}
-        >
-          <Image
-            src={s.src}
-            alt={i === 0 ? s.alt : ""}
-            fill
-            priority={i === 0}
-            sizes="100vw"
-            placeholder="blur"
-            className={`object-cover ${playing && i === active ? "animate-kenburns" : ""}`}
-            style={{ objectPosition: s.position }}
-          />
-        </div>
-      ))}
+      {slides.map((s, i) => {
+        const on = i === active;
+        return (
+          <div
+            key={s.src.src}
+            aria-hidden={!on}
+            className="hero-slide absolute inset-0"
+            style={{ opacity: on ? 1 : 0, visibility: on ? "visible" : "hidden", transitionDelay: on ? "0ms, 0ms" : "0ms, 1400ms" }}
+          >
+            <Image
+              src={s.src}
+              alt={i === 0 ? s.alt : ""}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              placeholder="blur"
+              className={`object-cover ${still ? "" : "hero-kenburns"}`}
+              style={{ objectPosition: s.position, animationDelay: `${-i * 3.5}s` }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -62,20 +72,32 @@ function HeroMedia({ playing }: { playing: boolean }) {
 export function HomeHero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useCalm();
-  const [inView, setInView] = useState(true);
+  const playingRef = useRef(true);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
-  // Ownly-style shrink: the full-bleed media settles into an inset rounded card as you scroll.
+  // Ownly-style shrink: the full-bleed media settles into an inset card as you scroll.
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
-  const radius = useTransform(scrollYProgress, [0, 0.4], [0, 36]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -140]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
-  const shade = useTransform(scrollYProgress, [0, 1], [1, 0.55]);
+  // Stop just short of 0/1 so the browser never drops the text's compositing layer mid-scroll
+  // (a layer being dropped and recreated is what made the text flicker).
+  const textOpacity = useTransform(scrollYProgress, [0, 0.55], [0.999, 0.001]);
+  const shade = useTransform(scrollYProgress, [0, 1], [0.999, 0.55]);
 
-  // Glass header while the hero is under it; solid header once past.
+  // Scroll state is written straight to the DOM (no React re-render per frame), and only on change.
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    document.documentElement.dataset.hero = v < 0.9 ? "over" : "past";
-    setInView(v < 1);
+    const root = document.documentElement;
+    const hero = v < 0.9 ? "over" : "past";
+    if (root.dataset.hero !== hero) root.dataset.hero = hero;
+    const section = ref.current;
+    if (section) {
+      const shrunk = v > 0.02 ? "true" : "false";
+      if (section.dataset.shrunk !== shrunk) section.dataset.shrunk = shrunk;
+      const playing = v < 1;
+      if (playingRef.current !== playing) {
+        playingRef.current = playing;
+        section.dataset.playing = String(playing);
+      }
+    }
   });
   useEffect(() => {
     document.documentElement.dataset.hero = "over";
@@ -87,12 +109,9 @@ export function HomeHero() {
   const still = Boolean(reduce);
 
   return (
-    <section ref={ref} aria-labelledby="hero-title" className="relative -mt-16 h-[100svh] min-h-[600px]">
-      <m.div
-        className="absolute inset-0 overflow-hidden will-change-transform"
-        style={still ? undefined : { scale, borderRadius: radius }}
-      >
-        <HeroMedia playing={!still && inView} />
+    <section ref={ref} aria-labelledby="hero-title" data-playing="true" data-shrunk="false" className="hero relative -mt-16 h-[100svh] min-h-[600px]">
+      <m.div className="hero-media absolute inset-0 overflow-hidden" style={still ? undefined : { scale }}>
+        <HeroMedia still={still} playingRef={playingRef} />
         <m.div
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(43,26,18,0.55)_0%,rgba(43,26,18,0.35)_60%,rgba(43,26,18,0.2)_100%),linear-gradient(to_bottom,rgba(43,26,18,0.55),rgba(43,26,18,0.25)_40%,rgba(43,26,18,0.85))]"
           style={still ? undefined : { opacity: shade }}
@@ -101,7 +120,7 @@ export function HomeHero() {
       </m.div>
 
       <m.div
-        className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 pt-16 text-center text-paper [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
+        className="hero-copy relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center px-4 pt-16 text-center text-paper [text-shadow:0_2px_24px_rgba(0,0,0,0.35)]"
         style={still ? undefined : { y: textY, opacity: textOpacity }}
       >
         <h1 id="hero-title" className="font-display text-[clamp(3.2rem,11vw,8.5rem)] font-extrabold leading-[0.9] tracking-tight">

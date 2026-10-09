@@ -166,7 +166,32 @@ body {
   70% { transform: translateY(10px); opacity: 0; }
   100% { transform: translateY(0); opacity: 0; }
 }
-.animate-kenburns { animation: kenburns 7s ease-out both; }
+/* Hero: slow zoom that only ever pauses, never restarts (restarts were a visible jump). */
+.hero-kenburns {
+  animation: kenburns 14s ease-in-out infinite alternate;
+}
+.hero[data-playing="false"] .hero-kenburns {
+  animation-play-state: paused;
+}
+.hero-slide {
+  transition-property: opacity, visibility;
+  transition-duration: 1400ms, 0ms;
+  transition-timing-function: ease-out, linear;
+}
+/* Stable compositing layers for everything that moves on scroll, so nothing re-rasterises mid-scroll. */
+.hero-media,
+.hero-copy {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+/* Corners round once (CSS transition) instead of being recomputed on every scroll frame. */
+.hero-media {
+  border-radius: 0;
+  transition: border-radius 400ms var(--ease-out);
+}
+.hero[data-shrunk="true"] .hero-media {
+  border-radius: 36px;
+}
 .animate-line-up { animation: line-up 800ms var(--ease-out) both; }
 .animate-wheel { animation: wheel 1.6s ease-in-out infinite; }
 
