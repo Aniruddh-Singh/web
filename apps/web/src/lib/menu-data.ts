@@ -7,23 +7,39 @@ import { indexMenu } from "./menu-index";
 
 export const API_URL = process.env.API_URL ?? "http://localhost:4000";
 
+/** Bundled-menu fallback: always in development; in production only with ALLOW_BUNDLED_MENU=true. */
+const fallbackAllowed = () => process.env.NODE_ENV !== "production" || process.env.ALLOW_BUNDLED_MENU === "true";
+
+type MenuResult = { ok: true; menu: MenuResponse } | { ok: false; error: string };
+
 /**
  * The menu from the API, cached across requests and prerendered into pages. Staff edits
  * refresh it on demand through /api/revalidate (tag "menu"); otherwise it refreshes hourly.
- * Failures throw, and are never cached.
+ *
+ * Errors thrown inside a cached function abort prerendering even if caught later, so when a
+ * fallback is allowed the failure is returned as a value and cached only briefly ("minutes":
+ * short enough to recover quickly, long enough to stay part of the prerender). In strict
+ * production it still throws, so a failed refresh keeps serving the last good menu.
  */
-async function fetchMenu(): Promise<MenuResponse> {
+async function fetchMenu(): Promise<MenuResult> {
   "use cache";
   cacheTag("menu");
-  cacheLife("hours");
-  let res: Response;
+  let failure: string | null = null;
+  let menu: MenuResponse | null = null;
   try {
-    res = await fetch(`${API_URL}/menu`);
+    const res = await fetch(`${API_URL}/menu`);
+    if (res.ok) menu = menuResponse.parse(await res.json());
+    else failure = `The API returned ${res.status} for /menu.`;
   } catch (e) {
-    throw new Error(`Could not reach the API at ${API_URL} to load the menu. Is it running? (${(e as Error).message})`);
+    failure = `Could not reach the API at ${API_URL} to load the menu. Is it running? (${(e as Error).message})`;
   }
-  if (!res.ok) throw new Error(`The API returned ${res.status} for /menu.`);
-  return menuResponse.parse(await res.json());
+  if (menu) {
+    cacheLife("hours");
+    return { ok: true, menu };
+  }
+  if (!fallbackAllowed()) throw new Error(failure!);
+  cacheLife("minutes");
+  return { ok: false, error: failure! };
 }
 
 /** The original menu file the database was seeded from, shaped like the API's response. */
@@ -66,22 +82,14 @@ function bundledMenu(): MenuResponse {
 
 let warned = false;
 
-/**
- * Production: the API is required (a failed refresh keeps serving the last good menu).
- * Development: if the API isn't running, fall back to the bundled menu so pages still load,
- * with a warning. The fallback isn't cached, so the real menu returns as soon as the API is up.
- */
 export async function getMenuData(): Promise<MenuResponse> {
-  try {
-    return await fetchMenu();
-  } catch (e) {
-    if (process.env.NODE_ENV === "production") throw e;
-    if (!warned) {
-      warned = true;
-      console.warn(`\n⚠ ${(e as Error).message}\n  Showing the bundled menu instead. Start the API with: pnpm --filter @coffeecat/api dev\n`);
-    }
-    return bundledMenu();
+  const result = await fetchMenu();
+  if (result.ok) return result.menu;
+  if (!warned) {
+    warned = true;
+    console.warn(`\n⚠ ${result.error}\n  Showing the bundled menu instead. Start the API with: pnpm --filter @coffeecat/api dev\n`);
   }
+  return bundledMenu();
 }
 
 export async function getMenu() {

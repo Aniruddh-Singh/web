@@ -1,0 +1,7 @@
+# Netlify settings for the customer site. In the Netlify UI set Base directory to "apps/web".
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"

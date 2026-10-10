@@ -69,14 +69,27 @@ pnpm --filter @coffeecat/api staff:create -- --email owner@<cafe-domain> --passw
 
 **Check:** `https://api.thecoffeecat.in/health` → `{"status":"ok","db":"ok"}`, and `/docs` → 404 (API docs are hidden in production).
 
-## 4. Customer site and staff portal on Vercel
+## 4. Customer site and staff portal (Netlify or Vercel)
+
+**Netlify:** create two sites from the repo. Each app has a `netlify.toml`, so you only set:
+
+| Setting | Customer site | Staff portal |
+|---|---|---|
+| Base directory | `apps/web` | `apps/admin` |
+| Build command / publish | from `apps/web/netlify.toml` (`pnpm build`, `.next`) | from `apps/admin/netlify.toml` |
+
+Each app's `build` script builds `packages/shared` first, so nothing else is needed. Environment variables are the same as in the table below.
+Until the API is hosted, add `ALLOW_BUNDLED_MENU=true` to the customer site so it builds from the bundled menu (remove it once `API_URL` points at the live API, so prices always come from the database).
+
+**Vercel** works the same way: Root Directory `apps/web` / `apps/admin`, framework Next.js.
+
+### Settings for both hosts
 
 Create **two** Vercel projects from the same repo:
 
 | Setting | Customer site | Staff portal |
 |---|---|---|
 | Root Directory | `apps/web` | `apps/admin` |
-| Build/Install | from `apps/web/vercel.json` | from `apps/admin/vercel.json` |
 | `API_URL` | `https://api.thecoffeecat.in` | – |
 | `NEXT_PUBLIC_API_URL` | `https://api.thecoffeecat.in` | `https://api.thecoffeecat.in` |
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://pfomyjpkqovshlhdczqf.supabase.co` | same |

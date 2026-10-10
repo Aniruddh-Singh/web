@@ -1,0 +1,7 @@
+# Netlify settings for the staff portal. In the Netlify UI set Base directory to "apps/admin".
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
