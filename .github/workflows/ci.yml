@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, production, backend-v1]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @coffeecat/shared build
+      - name: Typecheck, lint, unit tests
+        run: pnpm turbo run typecheck lint test
+      - name: API end-to-end tests (throwaway Postgres + fake Supabase/Razorpay)
+        run: pnpm --filter @coffeecat/api test:e2e
+      - name: Admin build
+        run: pnpm --filter @coffeecat/admin build
+        env:
+          NEXT_PUBLIC_API_URL: https://api.example.invalid
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+      # The customer site prerenders menu pages from a live API, so it builds on Vercel instead.

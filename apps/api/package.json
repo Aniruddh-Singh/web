@@ -1,0 +1,52 @@
+{
+  "name": "@coffeecat/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nest build",
+    "dev": "nest start --watch",
+    "start": "node dist/main.js",
+    "lint": "oxlint src/ test/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "db:local": "node scripts/local-postgres.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --env-file-if-exists=.env --import tsx src/db/migrate.ts",
+    "db:seed": "node --env-file-if-exists=.env --import tsx src/db/seed.ts",
+    "staff:create": "node --env-file-if-exists=.env --import tsx scripts/create-staff.ts"
+  },
+  "dependencies": {
+    "@coffeecat/shared": "workspace:*",
+    "@nestjs/common": "^12.1.2",
+    "@nestjs/core": "^12.1.2",
+    "@nestjs/platform-express": "^12.1.2",
+    "@nestjs/swagger": "^12.0.2",
+    "@nestjs/throttler": "^6.7.1",
+    "@supabase/supabase-js": "^2.117.3",
+    "drizzle-orm": "^0.45.4",
+    "helmet": "^8.3.0",
+    "jose": "^6.2.12",
+    "postgres": "^3.4.9",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^12.0.8",
+    "@nestjs/schematics": "^12.0.0",
+    "@nestjs/testing": "^12.1.2",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "@types/supertest": "^7.0.0",
+    "drizzle-kit": "^0.31.11",
+    "embedded-postgres": "17.10.0-beta.17",
+    "oxlint": "^1.58.0",
+    "supertest": "^7.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^6.0.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.1.2"
+  }
+}

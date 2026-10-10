@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/* Same tokens as the customer site (apps/web/src/app/globals.css) so the brand matches. */
+:root {
+  --paper: #ffffff;
+  --surface: #f5f3f1;
+  --foam: #f6ecea;
+  --line: #e7e1dc;
+  --ink: #2b1a12;
+  --muted: #6e625b;
+  --roast: #7a2229;
+  --roast-hover: #5e1a20;
+  --crema: #e9a92e;
+  --crema-ink: #6b4700;
+  --veg: #0f8a3b;
+  --nonveg: #b3261e;
+  --egg: #c88a00;
+  --ok: #1f7a43;
+  --warn-bg: #fdf6e7;
+  --danger-bg: #fbeceb;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-foam: var(--foam);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-roast: var(--roast);
+  --color-roast-hover: var(--roast-hover);
+  --color-crema: var(--crema);
+  --color-crema-ink: var(--crema-ink);
+  --color-veg: var(--veg);
+  --color-nonveg: var(--nonveg);
+  --color-egg: var(--egg);
+  --color-ok: var(--ok);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger-bg: var(--danger-bg);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-bricolage);
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-figtree), system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--roast);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@keyframes arrive {
+  0% { box-shadow: 0 0 0 0 rgb(233 169 46 / 0.7); }
+  100% { box-shadow: 0 0 0 14px rgb(233 169 46 / 0); }
+}
+.animate-arrive { animation: arrive 1.2s ease-out 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}

@@ -1,0 +1,11 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Dependencies allowed to run install scripts (pnpm blocks all others by default).
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver
+  - embedded-postgres
+  - "@embedded-postgres/darwin-arm64"
+  - "@embedded-postgres/linux-x64"

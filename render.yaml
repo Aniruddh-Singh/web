@@ -1,0 +1,31 @@
+# Render blueprint for the API (web and admin deploy to Vercel; see DEPLOYMENT.md).
+services:
+  - type: web
+    name: coffeecat-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    region: singapore # closest Render region to Supabase Mumbai
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: WEB_REVALIDATE_URL
+        sync: false
+      - key: REVALIDATE_SECRET
+        generateValue: true
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false

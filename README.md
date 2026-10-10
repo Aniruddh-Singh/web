@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Coffee Cat
 
-## Getting Started
+Monorepo for The Coffee Cat's ordering site, admin portal and API.
 
-First, run the development server:
+| Path | What | Port |
+|---|---|---|
+| `apps/web` | Customer site (Next.js 16) | 3000 |
+| `apps/admin` | Staff portal (Next.js 16): orders board, menu, store, coupons, staff, activity | 3001 |
+| `apps/api` | REST API (NestJS 12, Drizzle, Supabase Postgres) | 4000 |
+| `packages/shared` | Zod schemas, pricing and order rules shared by all three | – |
+
+## First-time setup
+
+Requires Node 20.9+ and pnpm 10.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp apps/api/.env.example apps/api/.env        # fill in DATABASE_URL and Supabase keys
+cp apps/web/.env.example apps/web/.env.local
+pnpm --filter @coffeecat/shared build
+pnpm --filter @coffeecat/api db:migrate       # create tables (RLS on)
+pnpm --filter @coffeecat/api db:seed          # load the menu, store settings, PURR50
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Daily development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm dev                                      # everything: API :4000, site :3000, staff portal :3001
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Or one at a time:
 
-## Learn More
+```bash
+pnpm --filter @coffeecat/api dev              # API on :4000 (reads apps/api/.env), docs at /docs
+pnpm --filter @coffeecat/web dev              # site on :3000
+pnpm --filter @coffeecat/admin dev            # staff portal on :3001
+```
 
-To learn more about Next.js, take a look at the following resources:
+If the API isn't running, the site still loads in development using the bundled menu file (it prints a warning). Orders, login and live updates need the API.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Offline? `pnpm --filter @coffeecat/api db:local` starts Postgres 17 without Docker; point `DATABASE_URL` at it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Checks
 
-## Deploy on Vercel
+```bash
+pnpm turbo run typecheck lint test            # everything
+pnpm --filter @coffeecat/api test:e2e         # API against a throwaway Postgres
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Database changes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Edit `apps/api/src/db/schema.ts`, then `pnpm --filter @coffeecat/api db:generate` and commit the new SQL in `apps/api/drizzle/`. Every table must keep `.enableRLS()`.
+
+## Staff logins
+
+```bash
+pnpm --filter @coffeecat/api staff:create -- --email someone@example.com --password '<10+ chars>' --role owner|manager|kitchen
+```
+
+Development logins (`dev-owner@example.com`, `dev-kitchen@example.com`) have their passwords in `apps/api/.env`.
+
+## Deploying
+
+See [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## Secrets
+
+`.env` and `.env.local` files are git-ignored. The Supabase **service-role key** and database URL belong only in `apps/api/.env` and the API host's settings, never in a `NEXT_PUBLIC_` variable.
