@@ -1,7 +1,5 @@
-# Netlify settings for the staff portal. In the Netlify UI set Base directory to "apps/admin".
-[build]
-  command = "pnpm build"
-  publish = ".next"
-
+# Netlify site for apps/admin. Netlify's monorepo detection sets the build command
+# (turbo run build --filter @coffeecat/admin, run from the repo root) and the publish
+# directory; don't override them here: a plain "pnpm build" would build every app.
 [build.environment]
   NODE_VERSION = "22"
