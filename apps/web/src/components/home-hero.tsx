@@ -17,7 +17,7 @@ export function HomeHero() {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden bg-ink text-paper">
       <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 h-[480px] w-[480px] rounded-full bg-crema/15 blur-3xl" />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-7 px-4 pb-12 pt-5 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:pb-20 md:pt-16">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-7 px-4 pb-10 pt-5 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:pb-20 md:pt-16">
         <div className="relative md:order-2">
           <div className="relative aspect-[16/11] overflow-hidden rounded-[24px] shadow-[0_30px_60px_rgba(0,0,0,0.45)] md:aspect-[4/5] md:rounded-[28px]">
             <Image

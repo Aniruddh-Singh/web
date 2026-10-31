@@ -57,15 +57,15 @@ export function PromiseCards() {
           <li key={c.title}>
             <Reveal delay={i * 0.08} className="h-full">
               <TiltCard>
-                <div className="relative flex h-full min-h-72 flex-col overflow-hidden rounded-3xl bg-[radial-gradient(120%_90%_at_10%_0%,#8a6a52_0%,var(--coffee)_45%,#1a110d_100%)] p-7 text-paper">
+                <div className="relative flex h-full flex-col overflow-hidden rounded-3xl md:min-h-72 bg-[radial-gradient(120%_90%_at_10%_0%,#8a6a52_0%,var(--coffee)_45%,#1a110d_100%)] p-5 text-paper md:p-7">
                   <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--glare-x,30%)_var(--glare-y,0%),rgba(255,255,255,0.18),transparent_45%)]" aria-hidden="true" />
                   <svg viewBox="0 0 120 40" className="pointer-events-none absolute -right-6 -top-2 w-40 opacity-15" aria-hidden="true">
                     <path d="M10 40 30 2 50 40Z M70 40 90 2 110 40Z" fill="currentColor" />
                   </svg>
-                  <h3 className="relative font-display text-2xl font-bold leading-tight">{c.title}</h3>
+                  <h3 className="relative font-display text-xl font-bold leading-tight md:text-2xl">{c.title}</h3>
                   <p className="relative mt-2 text-foam/90">{c.body}</p>
-                  <span className="relative mt-auto grid h-20 w-20 place-items-center self-start rounded-2xl border border-paper/30 bg-paper/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_10px_24px_rgba(0,0,0,0.25)] backdrop-blur-sm">
-                    <svg viewBox="0 0 24 24" className="h-10 w-10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <span className="relative mt-4 grid h-12 w-12 place-items-center self-start rounded-xl md:mt-auto md:h-20 md:w-20 md:rounded-2xl border border-paper/30 bg-paper/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_10px_24px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+                    <svg viewBox="0 0 24 24" className="h-6 w-6 md:h-10 md:w-10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       {c.icon}
                     </svg>
                   </span>

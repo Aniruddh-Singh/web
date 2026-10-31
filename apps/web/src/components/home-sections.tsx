@@ -39,7 +39,7 @@ function SectionHead({ id, eyebrow, title, sub, href, cta, tone = "light" }: { i
 export function OffersSection() {
   if (!offers.length) return null;
   return (
-    <section aria-labelledby="offers" className="mx-auto max-w-6xl px-4 pt-14">
+    <section aria-labelledby="offers" className="mx-auto max-w-6xl px-4 pt-10 md:pt-14">
       <SectionHead id="offers" eyebrow="A little treat" title="Offers for you" />
       <div className="mt-5">
         <OffersRail offers={offers} />
@@ -102,7 +102,7 @@ export async function CoffeeExperience() {
 
   return (
     <section aria-labelledby="coffee" className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-20 [&>*]:min-w-0">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-12 md:grid-cols-[0.9fr_1.1fr] md:items-center md:gap-10 md:py-16 [&>*]:min-w-0">
         <div>
           <SectionHead id="coffee" eyebrow="The coffee experience" title="Brewed for every mood" sub="Hot classics, cold coffees and frappes, served in the cat cup." tone="dark" />
           <div className="relative mt-8 hidden aspect-[4/5] max-w-sm overflow-hidden rounded-[28px] md:block">

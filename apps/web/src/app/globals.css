@@ -193,13 +193,18 @@ dialog.overlay {
   margin: 0;
   padding: 0;
   background: transparent;
-  overflow: hidden;
+  /* clip, not hidden: a hidden box can still be scrolled by focus, which made sheets jump in from the top. */
+  overflow: clip;
 }
 dialog.overlay::backdrop {
   background: rgb(34 24 19 / 0.55);
   animation: fade-in 200ms ease-out;
 }
-.animate-sheet-up { animation: sheet-up 320ms var(--ease-out); }
+/* Sheets rise from the bottom on phones; on desktop the centred modal rises a few pixels and fades in. */
+.overlay-sheet { animation: sheet-up 320ms var(--ease-out); }
+@media (min-width: 768px) {
+  .overlay-sheet { animation: zoom-in 260ms var(--ease-out); }
+}
 .animate-drawer-in { animation: drawer-in 320ms var(--ease-out); }
 .animate-zoom-in { animation: zoom-in 260ms var(--ease-out); }
 .animate-fade-in { animation: fade-in 200ms ease-out; }

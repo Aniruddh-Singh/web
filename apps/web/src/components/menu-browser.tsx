@@ -214,7 +214,7 @@ function CategoryBar({
   const chips = [{ id: "all", name: "All", count: categories.reduce((n, c) => n + countItems(c), 0) }, ...categories.map((c) => ({ id: c.id, name: c.name, count: countItems(c) }))];
 
   return (
-    <nav aria-label="Menu categories" className="sticky top-16 z-20 -mx-4 flex items-center gap-2 border-b border-line bg-cream/95 px-4 py-2.5 backdrop-blur">
+    <nav aria-label="Menu categories" className="sticky top-16 z-20 -mx-4 flex items-center gap-2 border-b border-line/60 bg-cream/60 px-4 py-2.5 backdrop-blur-xl backdrop-saturate-150">
       <div className={`relative shrink-0 ${searching ? "flex-1 md:flex-none" : ""}`}>
         <button
           type="button"

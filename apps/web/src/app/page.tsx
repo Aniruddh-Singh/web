@@ -38,13 +38,13 @@ export default function Home() {
       <PrototypeNotice />
       <HomeHero />
       <OffersSection />
-      <div className="space-y-20 pb-20 pt-14">
+      <div className="space-y-12 py-12 md:space-y-16 md:py-16">
         <CategoryTiles />
         <PopularPicks />
       </div>
       <CoffeeExperience />
       <StorySection />
-      <div className="space-y-20 pb-24 pt-4">
+      <div className="space-y-12 pb-14 md:space-y-16 md:pb-20">
         <PromiseCards />
         <ReviewsSection />
         <CafePhotos />

@@ -49,7 +49,7 @@ export function StorySection() {
   const words = story.split(" ");
 
   return (
-    <section ref={ref} aria-labelledby="story-heading" className="relative overflow-hidden py-24 sm:py-32">
+    <section ref={ref} aria-labelledby="story-heading" className="relative overflow-hidden py-12 sm:py-20 lg:py-28">
       {/* Hand-drawn line that draws itself, like Zomato's swirls. */}
       <svg className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block" viewBox="0 0 1440 700" preserveAspectRatio="none" aria-hidden="true">
         <m.path
@@ -75,11 +75,11 @@ export function StorySection() {
         <p ref={textRef} className="mt-6 font-display text-[clamp(1.5rem,3.2vw,2.4rem)] font-semibold leading-snug tracking-tight text-ink">
           {reduce ? story : words.map((w, i) => <Word key={i} word={w} progress={textProgress} range={[i / words.length, (i + 1) / words.length]} />)}
         </p>
-        <p className="mt-8 font-script text-4xl text-roast sm:text-5xl">See you at the swings.</p>
+        <p className="mt-6 font-script text-4xl text-roast sm:text-5xl">See you at the swings.</p>
       </div>
 
       {/* Phones: stickers sit in a row under the story instead of floating. */}
-      <div className="mt-10 flex justify-center gap-3 px-4 lg:hidden" aria-hidden="true">
+      <div className="mt-6 flex justify-center gap-3 px-4 lg:hidden" aria-hidden="true">
         {stickers.slice(0, 3).map((s) => (
           <Image key={s.src} src={s.src} alt="" width={360} height={360} sizes="96px" className="h-auto w-24" style={{ rotate: `${s.rotate}deg` }} />
         ))}

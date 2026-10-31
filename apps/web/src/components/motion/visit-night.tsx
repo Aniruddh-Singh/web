@@ -40,15 +40,15 @@ export function VisitNight() {
   const photoY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <section ref={ref} aria-labelledby="visit" className="relative overflow-hidden bg-[#1f0d0f] text-paper">
+    <section ref={ref} aria-labelledby="visit" className="relative overflow-hidden bg-ink text-paper">
       <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="block h-16 w-full sm:h-28" aria-hidden="true">
-        <path d="M0 0h1440v20C1100 120 340 120 0 20z" fill="var(--paper)" />
+        <path d="M0 0h1440v20C1100 120 340 120 0 20z" fill="var(--cream)" />
       </svg>
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         {!reduce && beans.map((b, i) => <Bean key={i} b={b} progress={scrollYProgress} />)}
       </div>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pb-20 pt-6 md:grid-cols-2">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 pb-14 pt-4 md:grid-cols-2 md:gap-10 md:pb-20">
         <m.div style={reduce ? undefined : { y: photoY }} className="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.45)] md:aspect-[4/4.6]">
           <Image src={storefront} alt="The Coffee Cat's lit sign over the entrance at night" fill sizes="(min-width: 768px) 50vw, 100vw" placeholder="blur" className="object-cover object-top" />
         </m.div>

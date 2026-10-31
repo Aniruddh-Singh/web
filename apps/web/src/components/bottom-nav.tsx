@@ -18,7 +18,7 @@ export function BottomNav() {
   const path = usePathname();
   const count = useStore(cartCount);
   return (
-    <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/95 backdrop-blur pb-[env(safe-area-inset-bottom)] md:hidden">
+    <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 border-t border-paper/60 bg-paper/55 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgba(34,24,19,0.08)] backdrop-blur-xl backdrop-saturate-150 md:hidden">
       <ul className="grid h-16 grid-cols-5 px-1">
         {tabs.map(({ href, label, Icon, match }) => {
           const active = match(path);
@@ -30,7 +30,7 @@ export function BottomNav() {
                 {...(href === "/checkout" ? { "data-cart-target": true } : {})}
                 className={`flex h-full flex-col items-center justify-center gap-0.5 text-[11px] transition-colors ${active ? "font-bold text-ink" : "font-medium text-muted"}`}
               >
-                <span className={`relative grid h-8 w-14 place-items-center rounded-full transition-colors duration-200 ${active ? "bg-foam" : ""}`}>
+                <span className={`relative grid h-8 w-14 place-items-center rounded-full transition-colors duration-200 ${active ? "bg-ink/10" : ""}`}>
                   <Icon className="h-5.5 w-5.5" />
                   {href === "/checkout" && count > 0 && (
                     <span key={count} className="animate-bump absolute right-2 -top-1 min-w-4 rounded-full bg-roast px-1 text-center text-[10px] font-bold leading-4 text-paper">

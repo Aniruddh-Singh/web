@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Offer } from "@/lib/cafe";
 import { actions, useHydrated, useStore } from "@/lib/store";
 import { CheckIcon } from "./icons";
-import { CloseButton, Overlay } from "./overlay";
+import { CloseButton, Overlay, useOverlayClose } from "./overlay";
 
 /** Offer tickets with one-tap "Copy" and a details sheet (terms, apply to cart). */
 export function OffersRail({ offers }: { offers: Offer[] }) {
@@ -82,6 +82,7 @@ function OfferDetails({ offer, onClose }: { offer: Offer; onClose: () => void })
   const hydrated = useHydrated();
   const current = useStore((s) => s.coupon);
   const applied = hydrated && offer.code && current === offer.code;
+  const close = useOverlayClose();
   return (
     <div className="relative p-6">
       <CloseButton onClick={onClose} className="absolute right-3 top-3" />
@@ -101,7 +102,7 @@ function OfferDetails({ offer, onClose }: { offer: Offer; onClose: () => void })
           type="button"
           onClick={() => {
             actions.setCoupon(offer.code!);
-            onClose();
+            void (close ? close() : onClose());
           }}
           disabled={Boolean(applied)}
           className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-roast font-semibold text-paper transition-colors hover:bg-roast-hover disabled:bg-ok"
