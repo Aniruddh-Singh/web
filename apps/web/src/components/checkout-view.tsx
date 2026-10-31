@@ -1,8 +1,9 @@
 "use client";
 
-import { formatINR as formatPaise, type CreateOrderResult, type FulfilmentMode, type PaymentMethod, type QuoteResult } from "@coffeecat/shared";
+import { formatINR as formatPaise, type CreateOrderResult, type FulfilmentMode, type PaymentMethod } from "@coffeecat/shared";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useQuote } from "@/lib/use-quote";
 import { ApiError, apiFetch } from "@/lib/api-client";
 import { payWithRazorpay } from "@/lib/razorpay";
 import { formatINR } from "@/lib/menu";
@@ -46,10 +47,8 @@ export function CheckoutView() {
   const [mode, setMode] = useState<FulfilmentMode>("delivery");
   const [details, setDetails] = useState<Details>({ name: "", phone: "", address: "", notes: "" });
   const [errors, setErrors] = useState<Errors>({});
-  const [couponInput, setCouponInput] = useState("");
-  const [coupon, setCoupon] = useState<string>();
-  const [quote, setQuote] = useState<QuoteResult | null>(null);
-  const [quoteError, setQuoteError] = useState<string>();
+  const coupon = useStore((s) => s.coupon);
+  const [couponInput, setCouponInput] = useState<string | null>(null);
   const [step, setStep] = useState<"details" | "pay">("details");
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState<{ message: string; unavailable?: string[] }>();
@@ -75,27 +74,8 @@ export function CheckoutView() {
 
   const cartKey = useMemo(() => lines.map((l) => `${l.id}:${l.qty}`).join(","), [lines]);
 
-  // Ask the server for the real bill whenever the cart, mode or coupon changes.
-  useEffect(() => {
-    if (!cartKey) return;
-    const controller = new AbortController();
-    const t = setTimeout(async () => {
-      try {
-        const q = await apiFetch<QuoteResult>("/orders/quote", {
-          json: { lines: cartKey.split(",").map((p) => ({ itemId: p.split(":")[0], qty: Number(p.split(":")[1]) })), mode, couponCode: coupon },
-          signal: controller.signal,
-        });
-        setQuote(q);
-        setQuoteError(undefined);
-      } catch (e) {
-        if ((e as Error).name !== "AbortError") setQuoteError(e instanceof ApiError ? e.message : "Couldn't update the total.");
-      }
-    }, 250);
-    return () => {
-      clearTimeout(t);
-      controller.abort();
-    };
-  }, [cartKey, mode, coupon]);
+  // The server's bill, refreshed whenever the cart, mode or coupon changes.
+  const { quote, error: quoteError } = useQuote(cartKey, mode, coupon);
 
   if (!hydrated) return <PageSkeleton />;
 
@@ -108,8 +88,7 @@ export function CheckoutView() {
   const unavailableNames = (quote?.unavailable ?? []).map((id) => menu.getItem(id)?.name ?? id);
 
   const applyCoupon = () => {
-    const code = couponInput.trim().toUpperCase();
-    setCoupon(code || undefined);
+    actions.setCoupon(couponInput ?? coupon);
   };
 
   const toPayment = () => {
@@ -171,7 +150,7 @@ export function CheckoutView() {
       <Steps current={step === "details" ? 0 : 1} />
       <h1 className="mt-6 font-display text-3xl font-bold">{step === "details" ? "Checkout" : `Pay ${total}`}</h1>
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_380px]">
+      <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_380px] [&>*]:min-w-0">
         <div>
           {unavailableNames.length > 0 && (
             <div role="alert" className="mb-5 rounded-xl bg-[#fbeceb] px-4 py-3 text-sm text-nonveg">
@@ -267,7 +246,7 @@ export function CheckoutView() {
           )}
         </div>
 
-        <aside aria-label="Order summary" className="h-fit rounded-2xl border border-line p-5 lg:sticky lg:top-24">
+        <aside aria-label="Order summary" className="h-fit rounded-2xl border border-line bg-paper p-5 lg:sticky lg:top-24">
           <h2 className="font-semibold">Your order</h2>
           <ul className="mt-3 divide-y divide-line">
             {lines.map((l) => (
@@ -284,8 +263,8 @@ export function CheckoutView() {
             <div className="mt-3">
               <label htmlFor="coupon" className="text-sm font-medium">Coupon code</label>
               <div className="mt-1 flex gap-2">
-                <input id="coupon" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), applyCoupon())} placeholder="PURR50" className="h-10 min-w-0 flex-1 rounded-lg border border-line px-3 text-[16px] uppercase focus:border-roast focus:outline-none" />
-                <button type="button" onClick={applyCoupon} className="rounded-lg border border-roast px-4 text-sm font-semibold text-roast hover:bg-foam">
+                <input id="coupon" value={couponInput ?? coupon ?? ""} onChange={(e) => setCouponInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), applyCoupon())} placeholder="Enter code" className="h-11 min-w-0 flex-1 rounded-lg border border-line px-3 text-[16px] uppercase focus:border-roast focus:outline-none" />
+                <button type="button" onClick={applyCoupon} className="h-11 rounded-lg border border-roast px-4 text-sm font-semibold text-roast hover:bg-foam">
                   Apply
                 </button>
               </div>
@@ -407,21 +386,21 @@ const stepNames = ["Details", "Payment", "Order placed"];
 /** Checkout progress: a real sequence, so numbered steps make sense here. */
 function Steps({ current }: { current: number }) {
   return (
-    <ol className="flex items-center gap-2 text-sm" aria-label="Checkout steps">
+    <ol className="flex w-full max-w-lg items-center gap-1.5 text-[13px] sm:gap-2 sm:text-sm" aria-label="Checkout steps">
       {stepNames.map((name, i) => {
         const done = i < current;
         const active = i === current;
         return (
-          <li key={name} className="flex items-center gap-2" aria-current={active ? "step" : undefined}>
+          <li key={name} className={`flex items-center gap-1.5 sm:gap-2 ${i < stepNames.length - 1 ? "min-w-0 flex-1" : "shrink-0"}`} aria-current={active ? "step" : undefined}>
             <span
-              className={`grid h-6 w-6 place-items-center rounded-full text-xs font-bold transition-colors duration-300 ${
+              className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-bold transition-colors duration-300 ${
                 done ? "bg-ok text-paper" : active ? "bg-roast text-paper" : "bg-surface text-muted"
               }`}
             >
               {done ? <CheckIcon className="h-3.5 w-3.5" /> : i + 1}
             </span>
-            <span className={active ? "font-semibold" : "text-muted"}>{name}</span>
-            {i < stepNames.length - 1 && <span className={`h-px w-6 sm:w-12 ${done ? "bg-ok" : "bg-line"}`} aria-hidden="true" />}
+            <span className={`whitespace-nowrap ${active ? "font-semibold" : "text-muted"}`}>{name}</span>
+            {i < stepNames.length - 1 && <span className={`h-px min-w-3 flex-1 ${done ? "bg-ok" : "bg-line"}`} aria-hidden="true" />}
           </li>
         );
       })}

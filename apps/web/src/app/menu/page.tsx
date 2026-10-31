@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { MenuBrowser, MenuSkeleton } from "@/components/menu-browser";
+import { MenuBrowser, MenuStatic } from "@/components/menu-browser";
 import { CartBar } from "@/components/cart-bar";
 
 export const metadata: Metadata = {
@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 export default function MenuPage() {
   return (
     <>
-      {/* Filters live in the URL, which is only known per request; the shell around it stays prerendered. */}
-      <Suspense fallback={<MenuSkeleton />}>
+      {/* Filters live in the URL, known only per request. The prerendered fallback is the full default menu, so the HTML always lists every dish. */}
+      <Suspense fallback={<MenuStatic />}>
         <MenuBrowser />
       </Suspense>
       <CartBar />

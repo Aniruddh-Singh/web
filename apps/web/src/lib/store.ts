@@ -18,10 +18,12 @@ export type State = {
   myOrders: MyOrder[];
   /** Wishlist: dish ids saved on this device. */
   saved: string[];
+  /** Coupon the customer chose to use; the server decides if it applies. */
+  coupon: string | null;
 };
 
 const KEY = "coffee-cat-v2";
-const initial: State = { cart: {}, myOrders: [], saved: [] };
+const initial: State = { cart: {}, myOrders: [], saved: [], coupon: null };
 
 let state: State = initial;
 let loaded = false;
@@ -134,11 +136,14 @@ export const actions = {
   toggleSaved(id: string) {
     set((s) => ({ ...s, saved: s.saved.includes(id) ? s.saved.filter((x) => x !== id) : [id, ...s.saved].slice(0, 100) }));
   },
+  setCoupon(code: string | null) {
+    set((s) => ({ ...s, coupon: code?.trim().toUpperCase() || null }));
+  },
   clearCart() {
     set((s) => ({ ...s, cart: {} }));
   },
   /** Remember an order placed from this device (newest first, last 20). */
   rememberOrder(code: string, token: string | null) {
-    set((s) => ({ ...s, cart: {}, myOrders: [{ code, token, at: Date.now() }, ...s.myOrders.filter((o) => o.code !== code)].slice(0, 20) }));
+    set((s) => ({ ...s, cart: {}, coupon: null, myOrders: [{ code, token, at: Date.now() }, ...s.myOrders.filter((o) => o.code !== code)].slice(0, 20) }));
   },
 };

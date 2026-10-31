@@ -5,11 +5,30 @@ import { business, pricing } from "./menu";
  * charges fees, so keep these in step with the admin portal's coupons and store settings.
  */
 
-export type Offer = { id: string; title: string; detail: string; code?: string };
+export type Offer = { id: string; title: string; detail: string; code?: string; terms: string[] };
 
 export const offers: Offer[] = [
-  { id: "purr50", title: "₹50 off on orders above ₹399", detail: "Use code at checkout", code: "PURR50" },
-  { id: "free-delivery", title: `Free delivery above ₹${pricing.freeDeliveryAbove}`, detail: "No code needed" },
+  {
+    id: "purr50",
+    title: "₹50 off on orders above ₹399",
+    detail: "Use code",
+    code: "PURR50",
+    terms: [
+      "Flat ₹50 off when your item total is ₹399 or more (before delivery, packaging and GST).",
+      "One coupon per order; it can't be exchanged for cash.",
+      "The discount is confirmed by the cafe's system at checkout before you pay.",
+      "The cafe may change or end this offer at any time.",
+    ],
+  },
+  {
+    id: "free-delivery",
+    title: `Free delivery above ₹${pricing.freeDeliveryAbove}`,
+    detail: "No code needed",
+    terms: [
+      `Delivery is free when your item total is ₹${pricing.freeDeliveryAbove} or more; below that a small delivery fee applies.`,
+      "Applies to delivery orders within the cafe's delivery area. Takeaway never has a delivery fee.",
+    ],
+  },
 ];
 
 export type Rating = { source: string; value: string; count: string };

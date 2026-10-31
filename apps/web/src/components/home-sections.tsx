@@ -52,17 +52,17 @@ export async function CategoryTiles() {
   const { categories, imageForCategory } = await getMenu();
   if (!categories.length) return null;
   return (
-    <section aria-labelledby="cats" className="mx-auto max-w-6xl px-4">
+    <section id="categories" aria-labelledby="cats" className="mx-auto max-w-6xl scroll-mt-24 px-4">
       <SectionHead id="cats" eyebrow="Find your favourite" title="What are you craving?" href="/menu" cta="Full menu" />
       <ul className="no-scrollbar -mx-4 mt-6 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-6">
         {categories.map((c, i) => (
-          <li key={c.id} className="w-24 shrink-0 sm:w-auto">
+          <li key={c.id} className="w-28 shrink-0 sm:w-auto">
             <Reveal delay={(i % 6) * 0.05} y={16}>
               <Link href={`/menu?category=${c.id}`} className="group block rounded-2xl border border-line bg-paper p-2 text-center transition hover:-translate-y-1 hover:border-crema hover:shadow-md">
                 <span className="relative block aspect-square overflow-hidden rounded-xl">
                   <Image src={imageForCategory(c.id) ?? "/images/cafe/interior.jpg"} alt="" fill sizes="(min-width: 1024px) 160px, (min-width: 640px) 25vw, 96px" className="object-cover transition-transform duration-500 group-hover:scale-110" />
                 </span>
-                <span className="mt-2 block truncate text-sm font-semibold">{c.name}</span>
+                <span className="mt-2 line-clamp-2 min-h-[2.5em] text-sm font-semibold leading-tight">{c.name}</span>
                 <span className="block text-xs text-muted">{countItems(c)} dishes</span>
               </Link>
             </Reveal>
@@ -85,7 +85,7 @@ export async function PopularPicks() {
     <section id="popular" aria-labelledby="best" className="mx-auto max-w-6xl scroll-mt-24 px-4">
       <SectionHead id="best" eyebrow="Made with love" title="Popular picks" sub="Marked as bestsellers on the cafe's delivery menu." href="/menu?bestsellers=1" cta="See all" />
       <div className="mt-6">
-        <DishGrid items={picks} label="Popular picks" />
+        <DishGrid items={picks} label="Popular picks" layout="rail" />
       </div>
     </section>
   );
@@ -102,7 +102,7 @@ export async function CoffeeExperience() {
 
   return (
     <section aria-labelledby="coffee" className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-20">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-20 [&>*]:min-w-0">
         <div>
           <SectionHead id="coffee" eyebrow="The coffee experience" title="Brewed for every mood" sub="Hot classics, cold coffees and frappes, served in the cat cup." tone="dark" />
           <div className="relative mt-8 hidden aspect-[4/5] max-w-sm overflow-hidden rounded-[28px] md:block">
@@ -131,7 +131,7 @@ function CoffeeRow({ item, photo }: { item: MenuItem; photo?: DishPhoto }) {
         <DishImage id={item.id} name={item.name} photo={photo} sizes="64px" className="h-16 w-16 rounded-2xl" />
       </DishLink>
       <div className="min-w-0 flex-1">
-        <p className="flex items-center gap-2">
+        <p className="flex min-w-0 items-center gap-2">
           <FoodMark type={item.type} className="h-3.5 w-3.5" />
           <DishLink id={item.id} className="truncate font-semibold hover:text-crema">
             {item.name}

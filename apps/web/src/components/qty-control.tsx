@@ -8,7 +8,7 @@ import { useMenu } from "./menu-provider";
 type Props = { id: string; name: string; size?: "sm" | "md" | "lg" | "block"; className?: string };
 
 const sizes = {
-  sm: "h-8 w-[84px] text-sm",
+  sm: "h-9 w-[96px] text-sm",
   md: "h-9 w-24",
   lg: "h-12 w-36 text-lg",
   // Fills its container; 44px tall for thumbs.
@@ -53,7 +53,7 @@ export function QtyControl({ id, name, size = "md", className = "" }: Props) {
       role="group"
       aria-label={`${name} quantity`}
     >
-      <button type="button" className="h-full w-1/3 rounded-l-lg transition-colors hover:bg-roast-hover active:bg-ink" onClick={() => actions.setQty(id, qty - 1)} aria-label={`Remove one ${name}`}>
+      <button type="button" className="h-full w-1/3 rounded-l-lg text-[1.15em] transition-colors hover:bg-roast-hover active:bg-ink" onClick={() => actions.setQty(id, qty - 1)} aria-label={`Remove one ${name}`}>
         −
       </button>
       <span key={qty} className="animate-bump" aria-live="polite">
@@ -61,7 +61,7 @@ export function QtyControl({ id, name, size = "md", className = "" }: Props) {
       </span>
       <button
         type="button"
-        className="h-full w-1/3 rounded-r-lg transition-colors hover:bg-roast-hover active:bg-ink"
+        className="h-full w-1/3 rounded-r-lg text-[1.15em] transition-colors hover:bg-roast-hover active:bg-ink"
         onClick={(e) => {
           actions.setQty(id, qty + 1);
           flyToCart(e.currentTarget);

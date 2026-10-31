@@ -35,17 +35,21 @@ export function FilterBar({
   onChange,
   placeholder = "Search in menu",
   sticky = true,
+  showSearch = true,
   children,
 }: {
   filters: Filters;
   onChange: (f: Filters) => void;
   placeholder?: string;
   sticky?: boolean;
+  /** Off when the page has its own search field (the full menu's sticky bar). */
+  showSearch?: boolean;
   children?: React.ReactNode;
 }) {
   return (
     <div className={`-mx-4 bg-cream px-4 py-3 ${sticky ? "sticky top-16 z-20 border-b border-line" : ""}`}>
       <div className="flex flex-wrap items-center gap-2">
+        {showSearch && (
         <label className="relative min-w-0 flex-1 basis-56">
           <span className="sr-only">{placeholder}</span>
           <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
@@ -57,7 +61,8 @@ export function FilterBar({
             className="h-11 w-full rounded-xl border border-line bg-paper pl-9 pr-3 text-[16px] transition-colors placeholder:text-muted focus:border-roast focus:bg-paper focus:outline-none"
           />
         </label>
-        <div className="no-scrollbar flex gap-2 overflow-x-auto">
+        )}
+        <div className="no-scrollbar -mx-4 flex max-w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 sm:mx-0 sm:max-w-full sm:px-0">
           <Toggle on={filters.vegOnly} onChange={(v) => onChange({ ...filters, vegOnly: v })}>
             <FoodMark type="veg" className="h-3.5 w-3.5" /> Veg only
           </Toggle>

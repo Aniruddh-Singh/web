@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { countItems } from "@/lib/menu";
 import { getMenu } from "@/lib/menu-data";
@@ -25,7 +26,30 @@ export async function generateMetadata({ params }: PageProps<"/menu/[category]">
   };
 }
 
-export default async function CategoryPage({ params }: PageProps<"/menu/[category]">) {
+// params sit behind Suspense so client navigations show the skeleton instantly; known categories still prerender in full.
+export default function CategoryPage({ params }: PageProps<"/menu/[category]">) {
+  return (
+    <Suspense fallback={<CategorySkeleton />}>
+      <CategoryContent params={params} />
+    </Suspense>
+  );
+}
+
+function CategorySkeleton() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-8" aria-busy="true" aria-label="Loading category">
+      <div className="skeleton mt-4 h-5 w-40" />
+      <div className="skeleton mt-4 h-40 w-full rounded-2xl sm:h-48" />
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+        {Array.from({ length: 4 }, (_, i) => (
+          <div key={i} className="skeleton aspect-[3/4] rounded-2xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+async function CategoryContent({ params }: { params: PageProps<"/menu/[category]">["params"] }) {
   const { category: id } = await params;
   const { categories, getCategory, imageForCategory } = await getMenu();
   const category = getCategory(id);
@@ -34,9 +58,9 @@ export default async function CategoryPage({ params }: PageProps<"/menu/[categor
   return (
     <div className="mx-auto max-w-6xl px-4 pb-8">
       <nav aria-label="Breadcrumb" className="mt-4 flex items-center gap-1 text-sm text-muted">
-        <Link href="/" className="hover:text-ink">Home</Link>
+        <Link href="/" className="py-2 hover:text-ink">Home</Link>
         <ChevronRight className="h-3.5 w-3.5" />
-        <Link href="/menu" className="hover:text-ink">Menu</Link>
+        <Link href="/menu" className="py-2 hover:text-ink">Menu</Link>
         <ChevronRight className="h-3.5 w-3.5" />
         <span aria-current="page" className="text-ink">{category.name}</span>
       </nav>
@@ -56,8 +80,8 @@ export default async function CategoryPage({ params }: PageProps<"/menu/[categor
             key={c.id}
             href={`/menu/${c.id}`}
             aria-current={c.id === category.id ? "page" : undefined}
-            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm transition-colors ${
-              c.id === category.id ? "bg-foam font-semibold text-roast" : "text-muted hover:bg-surface hover:text-ink"
+            className={`flex h-10 shrink-0 items-center rounded-full px-4 text-sm font-semibold transition-colors ${
+              c.id === category.id ? "bg-ink text-paper" : "border border-line bg-paper text-coffee hover:border-mocha"
             }`}
           >
             {c.name}

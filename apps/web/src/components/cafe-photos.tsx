@@ -6,7 +6,10 @@ import latte from "../../public/images/cafe/cafe-latte.jpg";
 import toast from "../../public/images/cafe/chilli-cheese-toast-poster.jpg";
 import menuCard from "../../public/images/cafe/menu-card.jpg";
 import lemonade from "../../public/images/cafe/mint-lemonade.jpg";
+import { business } from "@/lib/menu";
 import { PhotoGallery, type GalleryPhoto } from "./photo-gallery";
+
+const handle = `@${business.social.instagram.split("/").filter(Boolean).pop()}`;
 
 /* Spans make a mosaic: big interior shot, tall portraits, one wide wall shot. */
 const photos: GalleryPhoto[] = [
@@ -29,6 +32,25 @@ export function CafePhotos() {
       </h2>
       <p className="mt-1 text-muted">Swing chairs, plants and a cat on every cup.</p>
       <PhotoGallery photos={photos} />
+      <div className="mt-5 flex flex-col items-start justify-between gap-4 rounded-2xl bg-ink p-5 text-paper sm:flex-row sm:items-center sm:px-6">
+        <div>
+          <p className="font-display text-xl font-bold">Share your experience</p>
+          <p className="mt-0.5 text-sm text-foam/80">Snapped the swings or your cat cup? Tag {handle} on Instagram.</p>
+        </div>
+        <a
+          href={business.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex h-12 shrink-0 items-center gap-2 rounded-xl bg-crema px-5 font-bold text-ink transition-colors hover:bg-[#c9a985]"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.9" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+          </svg>
+          Follow {handle}
+        </a>
+      </div>
     </section>
   );
 }

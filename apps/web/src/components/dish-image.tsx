@@ -21,8 +21,13 @@ export function DishImage({ id, name, photo, sizes, morph, priority, className =
       {photo ? (
         <Image src={photo.src} alt={photo.real ? name : ""} fill sizes={sizes} priority={priority} className="object-cover" />
       ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-3 text-center">
-          <LogoMark className="h-auto w-1/3 max-w-28 opacity-90" />
+        // Menu-card style tile; the name only shows when the tile is big enough to read it.
+        <div className="@container flex h-full w-full flex-col items-center justify-center gap-2 bg-[radial-gradient(120%_90%_at_50%_0%,var(--paper)_0%,var(--foam)_70%)] p-3 text-center">
+          <LogoMark className="h-auto w-1/4 max-w-20 opacity-90 @[10rem]:w-1/5" />
+          <span className="hidden max-w-[90%] @[10rem]:block" aria-hidden="true">
+            <span className="line-clamp-2 font-display text-[15px] font-bold leading-tight text-coffee @[16rem]:text-xl">{name}</span>
+          </span>
+          <span className="hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-mocha @[10rem]:block">Photo coming soon</span>
           <span className="sr-only">No photo yet</span>
         </div>
       )}

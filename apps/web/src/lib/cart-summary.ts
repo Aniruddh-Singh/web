@@ -25,7 +25,7 @@ export function useCartSummary(maxSuggestions = 4): CartSummary {
   const status = useStoreStatus();
   const cart = useStore((s) => s.cart);
   const count = useStore(cartCount);
-  const lines = cartLines({ cart, myOrders: [], saved: [] }, menu);
+  const lines = cartLines({ cart, myOrders: [], saved: [], coupon: null }, menu);
   const itemTotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0);
   const freeDeliveryAbove = status ? status.freeDeliveryAbovePaise / 100 : pricing.freeDeliveryAbove;
   const estimate = status

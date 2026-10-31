@@ -25,14 +25,6 @@ export function CartBar() {
       <div className="relative mx-auto max-w-2xl">
         {visible && <PairingNudge inCart={new Set(lines.map((l) => l.id))} />}
         <div className="relative">
-        <svg
-          viewBox="0 0 64 22"
-          className={`absolute -top-[18px] left-6 h-[22px] w-16 transition-transform delay-150 duration-300 motion-reduce:transition-none ${visible ? "translate-y-0" : "translate-y-5"}`}
-          aria-hidden="true"
-        >
-          <path d="M4 22 12 2 24 22Z M40 22 52 2 60 22Z" fill="var(--ink)" />
-          <path d="M10 22 13 12 18 22Z M46 22 51 12 54 22Z" fill="var(--crema)" />
-        </svg>
         <button
           type="button"
           onClick={ui.openCart}

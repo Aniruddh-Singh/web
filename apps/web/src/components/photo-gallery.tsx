@@ -30,7 +30,7 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
       <ul className="mt-5 grid auto-rows-[150px] grid-cols-2 gap-2 sm:auto-rows-[190px] md:grid-cols-4">
         {photos.map((p, i) => (
           <li key={p.src.src} className={`relative overflow-hidden rounded-2xl bg-surface ${p.span}`}>
-            <button type="button" onClick={() => setIndex(i)} className="group block h-full w-full" aria-label={`View photo: ${p.alt}`}>
+            <button type="button" onClick={() => setIndex(i)} className="group relative block h-full w-full" aria-label={`View photo: ${p.alt}`}>
               <Image src={p.src} alt={p.alt} fill sizes="(min-width: 768px) 25vw, 50vw" placeholder="blur" className={`object-cover transition-transform duration-700 group-hover:scale-105 ${p.position ?? ""}`} />
             </button>
           </li>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { business } from "@/lib/menu";
 import { getMenu } from "@/lib/menu-data";
@@ -30,7 +31,33 @@ export async function generateMetadata({ params }: PageProps<"/dish/[id]">): Pro
 
 const typeLabel = { veg: "Vegetarian", "non-veg": "Non-vegetarian", egg: "Contains egg" } as const;
 
-export default async function DishPage({ params }: PageProps<"/dish/[id]">) {
+// params sit behind Suspense so client navigations show the skeleton instantly; known ids still prerender in full.
+export default function DishPage({ params }: PageProps<"/dish/[id]">) {
+  return (
+    <Suspense fallback={<DishSkeleton />}>
+      <DishContent params={params} />
+    </Suspense>
+  );
+}
+
+function DishSkeleton() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-28 md:pb-10" aria-busy="true" aria-label="Loading dish">
+      <div className="skeleton mt-4 h-5 w-48" />
+      <div className="mt-4 grid gap-6 md:grid-cols-2 md:gap-10">
+        <div className="skeleton aspect-square w-full rounded-3xl" />
+        <div className="space-y-4 md:pt-4">
+          <div className="skeleton h-5 w-32" />
+          <div className="skeleton h-12 w-3/4" />
+          <div className="skeleton h-8 w-24" />
+          <div className="skeleton h-20 w-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+async function DishContent({ params }: { params: PageProps<"/dish/[id]">["params"] }) {
   const { id } = await params;
   const { getItemContext, photoFor, pairingsFor, moreFromSection } = await getMenu();
   const ctx = getItemContext(id);
@@ -57,13 +84,13 @@ export default async function DishPage({ params }: PageProps<"/dish/[id]">) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
       <nav aria-label="Breadcrumb" className="mt-4 flex items-center gap-1 text-sm text-muted">
-        <Link href={`/menu/${category.id}`} className="mr-1 flex items-center rounded-lg p-1 hover:bg-surface hover:text-ink md:hidden" aria-label={`Back to ${category.name}`}>
+        <Link href={`/menu/${category.id}`} className="-ml-2 grid h-11 w-11 shrink-0 place-items-center rounded-lg hover:bg-surface hover:text-ink md:hidden" aria-label={`Back to ${category.name}`}>
           <ChevronLeft />
         </Link>
         <Link href="/menu" className="hidden hover:text-ink md:inline">Menu</Link>
         <ChevronRight className="hidden h-3.5 w-3.5 md:block" />
-        <Link href={`/menu/${category.id}`} className="hover:text-ink">{category.name}</Link>
-        <ChevronRight className="h-3.5 w-3.5" />
+        <Link href={`/menu/${category.id}`} className="shrink-0 py-2 hover:text-ink">{category.name}</Link>
+        <ChevronRight className="h-3.5 w-3.5 shrink-0" />
         <span aria-current="page" className="truncate text-ink">{item.name}</span>
       </nav>
 
@@ -89,12 +116,12 @@ export default async function DishPage({ params }: PageProps<"/dish/[id]">) {
             <FoodMark type={item.type} className="h-5 w-5" />
             <span className="text-sm text-muted">{typeLabel[item.type]}</span>
             {item.recommended && (
-              <span className="flex items-center gap-1 rounded-full bg-[#fdf6e7] px-2.5 py-1 text-xs font-semibold text-crema-ink">
+              <span className="flex items-center gap-1 rounded-full bg-foam px-2.5 py-1 text-xs font-semibold text-crema-ink">
                 <StarIcon fill="var(--crema)" /> Bestseller
               </span>
             )}
           </div>
-          <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">{item.name}</h1>
+          <h1 className="mt-3 font-display text-4xl font-bold leading-tight sm:text-5xl">{item.name}</h1>
           <p className="mt-3 text-2xl font-semibold">
             <LivePrice id={id} />
             {item.quantity && <span className="ml-2 text-base font-normal text-muted">{item.quantity}</span>}
@@ -107,11 +134,11 @@ export default async function DishPage({ params }: PageProps<"/dish/[id]">) {
           </div>
 
           <dl className="mt-8 grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-xl bg-surface p-3">
+            <div className="rounded-xl border border-line bg-paper p-3">
               <dt className="text-muted">Section</dt>
               <dd className="font-semibold">{section.name}</dd>
             </div>
-            <div className="rounded-xl bg-surface p-3">
+            <div className="rounded-xl border border-line bg-paper p-3">
               <dt className="text-muted">Category</dt>
               <dd className="font-semibold">
                 <Link href={`/menu/${category.id}`} className="hover:text-roast hover:underline">{category.name}</Link>

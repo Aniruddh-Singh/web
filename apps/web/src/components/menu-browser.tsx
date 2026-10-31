@@ -7,7 +7,7 @@ import { countItems, type MenuItem } from "@/lib/menu";
 import { useHydrated, useStore } from "@/lib/store";
 import { useStoreStatus } from "@/lib/store-status";
 import { DishGrid } from "./dish-tile";
-import { ChevronRight } from "./icons";
+import { ChevronRight, CloseIcon, SearchIcon } from "./icons";
 import { useMenu } from "./menu-provider";
 import { FilterBar, matchesFilters, SortSelect, sortItems, sorts, type Filters, type Sort } from "./menu-filters";
 import { scrollToElement } from "./motion/smooth-scroll";
@@ -24,34 +24,39 @@ export function ClosedNotice() {
 
 type Group = { id: string; title?: string; href?: string; sections: { id: string; name?: string; items: MenuItem[] }[] };
 
-/**
- * Full menu with URL state (/menu?category=coffee&sort=price-asc&veg=1), so back/forward and shared
- * links restore the same view. Search filters instantly and reaches the URL after a short pause.
- */
+/** Full menu driven by the URL (/menu?category=coffee&sort=price-asc&veg=1), so back/forward and shared links restore the view. */
 export function MenuBrowser() {
+  return <MenuView search={useSearchParams().toString()} />;
+}
+
+/** The default full menu, prerendered as the Suspense fallback so the page's HTML always lists every dish. */
+export function MenuStatic() {
+  return <MenuView search="" />;
+}
+
+function MenuView({ search }: { search: string }) {
   const { categories } = useMenu();
-  const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const hydrated = useHydrated();
   const savedIds = useStore((s) => s.saved);
+  const params = useMemo(() => new URLSearchParams(search), [search]);
 
   const categoryParam = params.get("category");
   const category = categories.some((c) => c.id === categoryParam) ? categoryParam! : "all";
   const sortParam = params.get("sort") as Sort | null;
   const sort: Sort = sortParam && sorts.includes(sortParam) ? sortParam : "popular";
+  const vegOnly = params.get("veg") === "1";
+  const bestsellers = params.get("bestsellers") === "1";
+  // Saved ids live in this browser only; ignore the flag until they're read.
+  const saved = params.get("saved") === "1" && hydrated;
   const [query, setQuery] = useState(params.get("q") ?? "");
   const deferredQuery = useDeferredValue(query);
-  const filters: Filters = {
-    query: deferredQuery,
-    vegOnly: params.get("veg") === "1",
-    bestsellers: params.get("bestsellers") === "1",
-    // Saved ids live in this browser only; ignore the flag until they're read.
-    saved: params.get("saved") === "1" && hydrated,
-  };
+  const filters: Filters = { query: deferredQuery, vegOnly, bestsellers, saved };
 
+  // Read the live URL rather than a render-time copy, so quick successive changes don't drop each other.
   const setParams = (patch: Record<string, string | null>) => {
-    const next = new URLSearchParams(params);
+    const next = new URLSearchParams(window.location.search);
     Object.entries(patch).forEach(([k, v]) => (v ? next.set(k, v) : next.delete(k)));
     const qs = next.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -61,14 +66,19 @@ export function MenuBrowser() {
   const urlQuery = params.get("q") ?? "";
   useEffect(() => {
     if (query === urlQuery) return;
-    const t = window.setTimeout(() => setParams({ q: query.trim() || null }), 300);
+    const t = window.setTimeout(() => {
+      const next = new URLSearchParams(window.location.search);
+      if (query.trim()) next.set("q", query.trim());
+      else next.delete("q");
+      const qs = next.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    }, 300);
     return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- setParams reads the latest params each render
-  }, [query, urlQuery]);
+  }, [query, urlQuery, router, pathname]);
 
   const groups = useMemo<Group[]>(() => {
     const scoped = category === "all" ? categories : categories.filter((c) => c.id === category);
-    const keep = (i: MenuItem) => matchesFilters(i, filters, savedIds);
+    const keep = (i: MenuItem) => matchesFilters(i, { query: deferredQuery, vegOnly, bestsellers, saved }, savedIds);
     if (sort !== "popular") {
       const items = sortItems(scoped.flatMap((c) => c.sections.flatMap((s) => s.items)).filter(keep), sort);
       return items.length ? [{ id: "sorted", sections: [{ id: "sorted", items }] }] : [];
@@ -83,17 +93,19 @@ export function MenuBrowser() {
           .filter((s) => s.items.length),
       }))
       .filter((g) => g.sections.length);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- filters is rebuilt each render from its primitive parts below
-  }, [categories, category, sort, filters.query, filters.vegOnly, filters.bestsellers, filters.saved, savedIds]);
+  }, [categories, category, sort, deferredQuery, vegOnly, bestsellers, saved, savedIds]);
 
   const total = groups.reduce((n, g) => n + g.sections.reduce((m, s) => m + s.items.length, 0), 0);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  const pickCategory = (id: string) => {
-    setParams({ category: id === "all" ? null : id });
-    // Bring the top of the list into view if we've scrolled past it.
+  const bringResultsIntoView = () => {
     const top = resultsRef.current?.getBoundingClientRect().top ?? 0;
     if (top < 0) scrollToElement(resultsRef.current, -140);
+  };
+
+  const pickCategory = (id: string) => {
+    setParams({ category: id === "all" ? null : id });
+    bringResultsIntoView();
   };
 
   const clearAll = () => {
@@ -114,32 +126,30 @@ export function MenuBrowser() {
       </div>
       <ClosedNotice />
 
-      <div className="mt-3">
+      <div className="mt-2">
         <FilterBar
           sticky={false}
+          showSearch={false}
           filters={{ ...filters, query }}
-          onChange={(f) => {
-            if (f.query !== query) return setQuery(f.query);
-            setParams({ veg: f.vegOnly ? "1" : null, bestsellers: f.bestsellers ? "1" : null, saved: f.saved ? "1" : null });
-          }}
-          placeholder="Search coffee, pizza, momos…"
+          onChange={(f) => setParams({ veg: f.vegOnly ? "1" : null, bestsellers: f.bestsellers ? "1" : null, saved: f.saved ? "1" : null })}
         >
           <SortSelect value={sort} onChange={(s) => setParams({ sort: s === "popular" ? null : s })} />
         </FilterBar>
       </div>
 
-      <CategoryChips active={category} onPick={pickCategory} />
+      <CategoryBar active={category} onPick={pickCategory} query={query} onQuery={setQuery} onSearchFocus={bringResultsIntoView} />
 
       <div ref={resultsRef} className="scroll-mt-36">
         <p className="mt-4 text-sm text-muted" aria-live="polite">
           {total} dish{total === 1 ? "" : "es"}
-          {filters.saved && " saved"}
+          {saved && " saved"}
+          {deferredQuery.trim() && ` for “${deferredQuery.trim()}”`}
         </p>
 
         {total === 0 ? (
           <div className="animate-rise py-16 text-center">
-            <p className="font-display text-xl font-bold">{filters.saved && !savedIds.length ? "No saved dishes yet" : "No dishes match"}</p>
-            <p className="mt-1 text-sm text-muted">{filters.saved && !savedIds.length ? "Tap the heart on any dish to save it here." : "Try another search or category."}</p>
+            <p className="font-display text-xl font-bold">{saved && !savedIds.length ? "No saved dishes yet" : "No dishes match"}</p>
+            <p className="mt-1 text-sm text-muted">{saved && !savedIds.length ? "Tap the heart on any dish to save it here." : "Try another search or category."}</p>
             <button type="button" onClick={clearAll} className="mt-4 h-11 rounded-xl border border-line bg-paper px-5 text-sm font-semibold hover:bg-surface">
               Clear filters
             </button>
@@ -151,7 +161,7 @@ export function MenuBrowser() {
                 <div className="flex items-baseline justify-between gap-4">
                   <h2 className="font-display text-2xl font-bold">{g.title}</h2>
                   {g.href && (
-                    <Link href={g.href} className="flex min-h-11 items-center gap-0.5 text-sm font-semibold text-roast hover:underline">
+                    <Link href={g.href} className="flex min-h-11 shrink-0 items-center gap-0.5 text-sm font-semibold text-roast hover:underline">
                       Category page <ChevronRight />
                     </Link>
                   )}
@@ -160,7 +170,7 @@ export function MenuBrowser() {
               {g.sections.map((s) => (
                 <div key={s.id} className="mt-3">
                   {s.name && <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">{s.name}</h3>}
-                  <DishGrid items={s.items} query={filters.query} label={s.name ?? g.title} />
+                  <DishGrid items={s.items} query={deferredQuery} label={s.name ?? g.title} />
                 </div>
               ))}
             </section>
@@ -171,22 +181,80 @@ export function MenuBrowser() {
   );
 }
 
-/** Sticky, horizontally scrolling category tabs; the active tab is kept in view. */
-function CategoryChips({ active, onPick }: { active: string; onPick: (id: string) => void }) {
+/**
+ * Sticky bar: search plus horizontally scrolling category tabs (active tab kept in view).
+ * On phones search is an icon that expands over the tabs; from md it's always open.
+ */
+function CategoryBar({
+  active,
+  onPick,
+  query,
+  onQuery,
+  onSearchFocus,
+}: {
+  active: string;
+  onPick: (id: string) => void;
+  query: string;
+  onQuery: (q: string) => void;
+  onSearchFocus: () => void;
+}) {
   const { categories } = useMenu();
   const listRef = useRef<HTMLUListElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const searching = expanded || query !== "";
 
   useEffect(() => {
     const list = listRef.current;
     const chip = list?.querySelector<HTMLElement>('[aria-pressed="true"]');
     if (!list || !chip) return;
     list.scrollTo({ left: chip.offsetLeft - list.clientWidth / 2 + chip.clientWidth / 2, behavior: "smooth" });
-  }, [active]);
+  }, [active, searching]);
 
   const chips = [{ id: "all", name: "All", count: categories.reduce((n, c) => n + countItems(c), 0) }, ...categories.map((c) => ({ id: c.id, name: c.name, count: countItems(c) }))];
+
   return (
-    <nav aria-label="Menu categories" className="sticky top-16 z-20 -mx-4 border-b border-line bg-cream/95 px-4 py-2.5 backdrop-blur">
-      <ul ref={listRef} className="no-scrollbar relative flex gap-2 overflow-x-auto">
+    <nav aria-label="Menu categories" className="sticky top-16 z-20 -mx-4 flex items-center gap-2 border-b border-line bg-cream/95 px-4 py-2.5 backdrop-blur">
+      <div className={`relative shrink-0 ${searching ? "flex-1 md:flex-none" : ""}`}>
+        <button
+          type="button"
+          onClick={() => {
+            setExpanded(true);
+            requestAnimationFrame(() => inputRef.current?.focus());
+          }}
+          aria-label="Search the menu"
+          className={`grid h-10 w-10 place-items-center rounded-full border border-line bg-paper text-coffee hover:border-mocha md:hidden ${searching ? "hidden" : ""}`}
+        >
+          <SearchIcon className="h-5 w-5" />
+        </button>
+        <label className={`relative md:block md:w-64 ${searching ? "block" : "hidden"}`}>
+          <span className="sr-only">Search the menu</span>
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+          <input
+            ref={inputRef}
+            type="search"
+            value={query}
+            onChange={(e) => onQuery(e.target.value)}
+            onFocus={onSearchFocus}
+            onKeyDown={(e) => e.key === "Escape" && (onQuery(""), setExpanded(false))}
+            placeholder="Search dishes…"
+            className="h-10 w-full rounded-full border border-line bg-paper pl-9 pr-10 text-[16px] placeholder:text-muted focus:border-roast focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              onQuery("");
+              setExpanded(false);
+            }}
+            aria-label="Close search"
+            className={`absolute right-0.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-muted hover:text-ink ${query || expanded ? "" : "md:hidden"}`}
+          >
+            <CloseIcon className="h-4 w-4" />
+          </button>
+        </label>
+      </div>
+
+      <ul ref={listRef} className={`no-scrollbar relative min-w-0 flex-1 gap-2 overflow-x-auto ${searching ? "hidden md:flex" : "flex"}`}>
         {chips.map((c) => {
           const on = active === c.id;
           return (
@@ -207,33 +275,5 @@ function CategoryChips({ active, onPick }: { active: string; onPick: (id: string
         })}
       </ul>
     </nav>
-  );
-}
-
-/** Same footprint as the menu while the URL state is read on the client. */
-export function MenuSkeleton() {
-  return (
-    <div className="mx-auto max-w-6xl px-4 pb-10" aria-busy="true" aria-label="Loading menu">
-      <div className="skeleton mt-8 h-4 w-32" />
-      <div className="skeleton mt-3 h-10 w-64" />
-      <div className="skeleton mt-6 h-11 w-full" />
-      <div className="mt-4 flex gap-2">
-        {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="skeleton h-10 w-24 shrink-0 rounded-full" />
-        ))}
-      </div>
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-        {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className="overflow-hidden rounded-2xl border border-line bg-paper">
-            <div className="skeleton aspect-[4/3] rounded-none" />
-            <div className="space-y-2 p-4">
-              <div className="skeleton h-4 w-3/4" />
-              <div className="skeleton h-3 w-full" />
-              <div className="skeleton h-10 w-full" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }
