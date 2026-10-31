@@ -41,7 +41,7 @@ export function FloatingCta() {
         href="/menu"
         tabIndex={show ? 0 : -1}
         aria-hidden={!show}
-        className={`flex items-center gap-3 rounded-full bg-roast py-2 pl-6 pr-2 font-semibold text-paper shadow-[0_10px_30px_rgba(122,34,41,0.45)] transition hover:bg-roast-hover active:scale-95 ${show ? "pointer-events-auto" : ""}`}
+        className={`flex items-center gap-3 rounded-full bg-ink py-2 pl-6 pr-2 font-semibold text-paper shadow-[0_10px_30px_rgba(34,24,19,0.4)] transition hover:bg-coffee active:scale-95 ${show ? "pointer-events-auto" : ""}`}
       >
         Order now
         <span className="grid h-9 w-9 place-items-center rounded-full bg-paper/15">

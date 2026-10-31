@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { formatINR, type MenuItem } from "@/lib/menu";
 import { useMenu } from "./menu-provider";
 import { effectivePrice, useStore } from "@/lib/store";
 import { DishImage } from "./dish-image";
+import { DishLink } from "./dish-link";
 import { FoodMark } from "./food-mark";
 import { QtyControl } from "./qty-control";
 
@@ -15,7 +15,7 @@ export function DishCard({ item, morph = false }: { item: MenuItem; morph?: bool
   return (
     <div className="group flex h-full w-44 shrink-0 snap-start flex-col sm:w-52">
       <div className="relative">
-        <Link href={`/dish/${item.id}`} tabIndex={-1} aria-hidden="true" className="block">
+        <DishLink id={item.id} tabIndex={-1} aria-hidden="true" className="block">
           <DishImage
             id={item.id}
             name={item.name}
@@ -24,16 +24,16 @@ export function DishCard({ item, morph = false }: { item: MenuItem; morph?: bool
             morph={morph}
             className="aspect-square w-full rounded-2xl transition-transform duration-300 group-hover:scale-[1.02]"
           />
-        </Link>
+        </DishLink>
         <div className="absolute -bottom-4 inset-x-0 flex justify-center">
           <QtyControl id={item.id} name={item.name} size="sm" />
         </div>
       </div>
       <div className="mt-6 flex items-start gap-2">
         <FoodMark type={item.type} className="mt-0.5 h-3.5 w-3.5" />
-        <Link href={`/dish/${item.id}`} className="text-sm font-semibold leading-snug hover:text-roast">
+        <DishLink id={item.id} className="text-sm font-semibold leading-snug hover:text-roast">
           {item.name}
-        </Link>
+        </DishLink>
       </div>
       <p className="ml-5.5 mt-0.5 text-sm text-muted">{formatINR(price)}</p>
     </div>

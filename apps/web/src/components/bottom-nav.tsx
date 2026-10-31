@@ -18,8 +18,8 @@ export function BottomNav() {
   const path = usePathname();
   const count = useStore(cartCount);
   return (
-    <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden">
-      <ul className="grid h-16 grid-cols-5">
+    <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/95 backdrop-blur pb-[env(safe-area-inset-bottom)] md:hidden">
+      <ul className="grid h-16 grid-cols-5 px-1">
         {tabs.map(({ href, label, Icon, match }) => {
           const active = match(path);
           return (
@@ -28,13 +28,12 @@ export function BottomNav() {
                 href={href}
                 aria-current={active ? "page" : undefined}
                 {...(href === "/checkout" ? { "data-cart-target": true } : {})}
-                className={`relative flex h-full flex-col items-center justify-center gap-0.5 text-[11px] font-medium transition-colors ${active ? "text-roast" : "text-muted"}`}
+                className={`flex h-full flex-col items-center justify-center gap-0.5 text-[11px] transition-colors ${active ? "font-bold text-ink" : "font-medium text-muted"}`}
               >
-                <span className={`absolute top-0 h-0.5 w-8 rounded-full bg-roast transition-transform duration-200 ${active ? "scale-x-100" : "scale-x-0"}`} />
-                <span className="relative">
-                  <Icon className="h-6 w-6" />
+                <span className={`relative grid h-8 w-14 place-items-center rounded-full transition-colors duration-200 ${active ? "bg-foam" : ""}`}>
+                  <Icon className="h-5.5 w-5.5" />
                   {href === "/checkout" && count > 0 && (
-                    <span key={count} className="animate-bump absolute -right-2.5 -top-1.5 min-w-4 rounded-full bg-roast px-1 text-center text-[10px] font-bold leading-4 text-paper">
+                    <span key={count} className="animate-bump absolute right-2 -top-1 min-w-4 rounded-full bg-roast px-1 text-center text-[10px] font-bold leading-4 text-paper">
                       {count}
                     </span>
                   )}

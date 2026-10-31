@@ -5,7 +5,7 @@ import type { FoodType } from "./menu";
 import type { MenuIndex } from "./menu-index";
 
 /*
- * Browser-only state: the cart, and the orders placed from this device (code + private
+ * Browser-only state: the cart, saved dishes, and the orders placed from this device (code + private
  * tracking token, so guests can follow them). Prices, stock, hours and orders themselves
  * live in the API.
  */
@@ -16,10 +16,12 @@ export type MyOrder = { code: string; token: string | null; at: number };
 export type State = {
   cart: Record<string, number>;
   myOrders: MyOrder[];
+  /** Wishlist: dish ids saved on this device. */
+  saved: string[];
 };
 
 const KEY = "coffee-cat-v2";
-const initial: State = { cart: {}, myOrders: [] };
+const initial: State = { cart: {}, myOrders: [], saved: [] };
 
 let state: State = initial;
 let loaded = false;
@@ -128,6 +130,9 @@ export const actions = {
       ids.forEach((id) => delete cart[id]);
       return { ...s, cart };
     });
+  },
+  toggleSaved(id: string) {
+    set((s) => ({ ...s, saved: s.saved.includes(id) ? s.saved.filter((x) => x !== id) : [id, ...s.saved].slice(0, 100) }));
   },
   clearCart() {
     set((s) => ({ ...s, cart: {} }));

@@ -1,12 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { MenuItem } from "@/lib/menu";
 import { useMenu } from "./menu-provider";
-import { DishRow } from "./dish-row";
-import { FilterBar, noFilters, type Filters } from "./menu-filters";
-
-type Sort = "popular" | "price-asc" | "price-desc";
+import { useStore } from "@/lib/store";
+import { DishGrid } from "./dish-tile";
+import { FilterBar, matchesFilters, noFilters, SortSelect, sortItems, type Filters, type Sort } from "./menu-filters";
 
 /** Category page body: section chips, filters, sorting and the dish list. */
 export function CategoryListing({ categoryId }: { categoryId: string }) {
@@ -14,38 +12,25 @@ export function CategoryListing({ categoryId }: { categoryId: string }) {
   const [filters, setFilters] = useState<Filters>(noFilters);
   const [section, setSection] = useState("all");
   const [sort, setSort] = useState<Sort>("popular");
+  const savedIds = useStore((s) => s.saved);
 
   const groups = useMemo(() => {
-    const q = filters.query.trim().toLowerCase();
-    const keep = (i: MenuItem) =>
-      (!q || i.name.toLowerCase().includes(q)) && (!filters.vegOnly || i.type === "veg") && (!filters.bestsellers || i.recommended);
     const sections = category.sections
       .filter((s) => section === "all" || s.id === section)
-      .map((s) => ({ ...s, items: s.items.filter(keep) }))
+      .map((s) => ({ ...s, items: sortItems(s.items.filter((i) => matchesFilters(i, filters, savedIds)), sort) }))
       .filter((s) => s.items.length);
     if (sort === "popular") return sections;
     // Price sorts flatten the sections into one list.
-    const flat = sections.flatMap((s) => s.items).sort((a, b) => (sort === "price-asc" ? a.price - b.price : b.price - a.price));
+    const flat = sortItems(sections.flatMap((s) => s.items), sort);
     return flat.length ? [{ id: "sorted", name: "", items: flat }] : [];
-  }, [category, filters, section, sort]);
+  }, [category, filters, section, sort, savedIds]);
 
   const total = groups.reduce((n, g) => n + g.items.length, 0);
 
   return (
     <div>
       <FilterBar filters={filters} onChange={setFilters} placeholder={`Search in ${category.name}`}>
-        <label className="flex shrink-0 items-center">
-          <span className="sr-only">Sort dishes</span>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as Sort)}
-            className="h-9 rounded-full border border-line bg-paper px-3 text-sm font-medium text-ink focus:border-roast focus:outline-none"
-          >
-            <option value="popular">Sort: Popular</option>
-            <option value="price-asc">Price: low to high</option>
-            <option value="price-desc">Price: high to low</option>
-          </select>
-        </label>
+        <SortSelect value={sort} onChange={setSort} />
       </FilterBar>
 
       {category.sections.length > 1 && (
@@ -56,8 +41,8 @@ export function CategoryListing({ categoryId }: { categoryId: string }) {
               type="button"
               aria-pressed={section === s.id}
               onClick={() => setSection(s.id)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors active:scale-95 ${
-                section === s.id ? "bg-ink text-paper" : "bg-surface text-ink hover:bg-foam"
+              className={`h-10 shrink-0 rounded-full px-4 text-sm font-semibold transition-colors active:scale-95 ${
+                section === s.id ? "bg-ink text-paper" : "border border-line bg-paper text-coffee hover:border-mocha"
               }`}
             >
               {s.name}
@@ -88,11 +73,9 @@ export function CategoryListing({ categoryId }: { categoryId: string }) {
         groups.map((g) => (
           <section key={g.id} aria-label={g.name || "Dishes"} className="mt-2">
             {g.name && category.sections.length > 1 && <h2 className="mt-6 font-display text-lg font-bold">{g.name}</h2>}
-            <ul className="grid lg:grid-cols-2 lg:gap-x-12">
-              {g.items.map((i) => (
-                <DishRow key={i.id} item={i} query={filters.query} />
-              ))}
-            </ul>
+            <div className="mt-3">
+              <DishGrid items={g.items} query={filters.query} label={g.name || "Dishes"} />
+            </div>
           </section>
         ))
       )}

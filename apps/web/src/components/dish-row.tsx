@@ -1,15 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { formatINR, type MenuItem } from "@/lib/menu";
 import { useMenu } from "./menu-provider";
 import { effectivePrice, useStore } from "@/lib/store";
 import { DishImage } from "./dish-image";
+import { DishLink } from "./dish-link";
 import { FoodMark } from "./food-mark";
 import { StarIcon } from "./icons";
 import { QtyControl } from "./qty-control";
 
-function Highlight({ text, query }: { text: string; query?: string }) {
+export function Highlight({ text, query }: { text: string; query?: string }) {
   const q = query?.trim();
   if (!q) return <>{text}</>;
   const i = text.toLowerCase().indexOf(q.toLowerCase());
@@ -28,7 +28,6 @@ export function DishRow({ item, query, morph = true, context }: { item: MenuItem
   const menu = useMenu();
   const price = useStore((s) => effectivePrice(s, item.id, menu));
   const photo = menu.listPhotoFor(item);
-  const href = `/dish/${item.id}`;
   const description = item.description;
 
   return (
@@ -44,9 +43,9 @@ export function DishRow({ item, query, morph = true, context }: { item: MenuItem
           )}
         </div>
         <h4 className="text-[17px] font-semibold leading-snug">
-          <Link href={href} className="hover:text-roast hover:underline hover:decoration-1 hover:underline-offset-4">
+          <DishLink id={item.id} className="hover:text-roast hover:underline hover:decoration-1 hover:underline-offset-4">
             <Highlight text={item.name} query={query} />
-          </Link>
+          </DishLink>
         </h4>
         <p className="font-medium">{formatINR(price)}</p>
         {context && <p className="text-xs text-muted">{context}</p>}
@@ -57,9 +56,9 @@ export function DishRow({ item, query, morph = true, context }: { item: MenuItem
       </div>
       {photo ? (
         <div className="relative h-31 w-33 shrink-0">
-          <Link href={href} tabIndex={-1} aria-hidden="true" className="block">
+          <DishLink id={item.id} tabIndex={-1} aria-hidden="true" className="block">
             <DishImage id={item.id} name={item.name} photo={photo} sizes="132px" morph={morph} className="h-27.5 w-full rounded-xl" />
-          </Link>
+          </DishLink>
           <div className="absolute inset-x-0 bottom-0 flex justify-center">
             <QtyControl id={item.id} name={item.name} />
           </div>

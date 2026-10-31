@@ -57,7 +57,7 @@ export function PromiseCards() {
           <li key={c.title}>
             <Reveal delay={i * 0.08} className="h-full">
               <TiltCard>
-                <div className="relative flex h-full min-h-72 flex-col overflow-hidden rounded-3xl bg-[radial-gradient(120%_90%_at_10%_0%,#a33a42_0%,var(--roast)_45%,#3d0f13_100%)] p-7 text-paper">
+                <div className="relative flex h-full min-h-72 flex-col overflow-hidden rounded-3xl bg-[radial-gradient(120%_90%_at_10%_0%,#8a6a52_0%,var(--coffee)_45%,#1a110d_100%)] p-7 text-paper">
                   <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--glare-x,30%)_var(--glare-y,0%),rgba(255,255,255,0.18),transparent_45%)]" aria-hidden="true" />
                   <svg viewBox="0 0 120 40" className="pointer-events-none absolute -right-6 -top-2 w-40 opacity-15" aria-hidden="true">
                     <path d="M10 40 30 2 50 40Z M70 40 90 2 110 40Z" fill="currentColor" />

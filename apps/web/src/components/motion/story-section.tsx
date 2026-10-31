@@ -71,7 +71,7 @@ export function StorySection() {
         <svg viewBox="0 0 24 24" className="mx-auto h-7 w-7 text-roast" aria-hidden="true" fill="currentColor">
           <path d="M12 0c.8 6.4 4.8 10.4 12 12-7.2 1.6-11.2 5.6-12 12-.8-6.4-4.8-10.4-12-12C7.2 10.4 11.2 6.4 12 0z" />
         </svg>
-        <h2 id="story-heading" className="sr-only">Our story</h2>
+        <h2 id="story-heading" className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-mocha">Why The Coffee Cat?</h2>
         <p ref={textRef} className="mt-6 font-display text-[clamp(1.5rem,3.2vw,2.4rem)] font-semibold leading-snug tracking-tight text-ink">
           {reduce ? story : words.map((w, i) => <Word key={i} word={w} progress={textProgress} range={[i / words.length, (i + 1) / words.length]} />)}
         </p>

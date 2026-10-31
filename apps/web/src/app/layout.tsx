@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Caveat, Figtree } from "next/font/google";
+import { Caveat, Figtree, Playfair_Display } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { BottomNav } from "@/components/bottom-nav";
@@ -7,11 +7,12 @@ import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { MotionProvider } from "@/components/motion/reveal";
 import { MenuProvider } from "@/components/menu-provider";
 import { CustomerAuthProvider } from "@/components/customer-auth";
+import { Overlays } from "@/components/overlays";
 import { getMenuData } from "@/lib/menu-data";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["600", "700", "800"],
 });
@@ -48,13 +49,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#221813",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const menu = await getMenuData();
   return (
-    <html lang="en-IN" className={`${bricolage.variable} ${figtree.variable} ${caveat.variable} h-full antialiased`}>
+    <html lang="en-IN" className={`${playfair.variable} ${figtree.variable} ${caveat.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"
@@ -72,6 +73,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           </main>
           <SiteFooter />
           <BottomNav />
+          <Overlays />
         </MotionProvider>
         </CustomerAuthProvider>
         </MenuProvider>
