@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "./icons";
 import { CloseButton, Overlay } from "./overlay";
 
-export type GalleryPhoto = { src: StaticImageData; alt: string; span: string; position?: string };
+export type GalleryPhoto = { src: StaticImageData; alt: string; position?: string };
 
-/** Mosaic of cafe photos; tapping one opens a full-screen lightbox (buttons or arrow keys). */
+/** Uniform square grid of cafe photos; tapping one opens a full-screen lightbox (buttons or arrow keys). */
 export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
   const [index, setIndex] = useState<number | null>(null);
   const open = index !== null;
@@ -27,9 +27,9 @@ export function PhotoGallery({ photos }: { photos: GalleryPhoto[] }) {
 
   return (
     <>
-      <ul className="mt-5 grid auto-rows-[150px] grid-cols-2 gap-2 sm:auto-rows-[190px] md:grid-cols-4">
+      <ul className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
         {photos.map((p, i) => (
-          <li key={p.src.src} className={`relative overflow-hidden rounded-2xl bg-surface ${p.span}`}>
+          <li key={p.src.src} className="relative aspect-square overflow-hidden rounded-2xl bg-surface">
             <button type="button" onClick={() => setIndex(i)} className="group relative block h-full w-full" aria-label={`View photo: ${p.alt}`}>
               <Image src={p.src} alt={p.alt} fill sizes="(min-width: 768px) 25vw, 50vw" placeholder="blur" className={`object-cover transition-transform duration-700 group-hover:scale-105 ${p.position ?? ""}`} />
             </button>

@@ -5,6 +5,23 @@ import { useEffect, useRef } from "react";
 export const inputClass =
   "mt-1 h-11 w-full rounded-xl border border-line bg-paper px-3 text-[16px] focus:border-roast focus:outline-none aria-[invalid=true]:border-nonveg disabled:bg-surface disabled:text-muted";
 
+/** Native select (keeps keyboard and mobile pickers) styled to match inputs, with our own chevron. */
+export function Select({ className = "", children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <span className={`relative mt-1 block ${className}`}>
+      <select
+        {...props}
+        className="h-11 w-full cursor-pointer appearance-none rounded-xl border border-line bg-paper pl-3 pr-10 text-[16px] transition-colors hover:border-mocha focus:border-roast focus:outline-none focus-visible:ring-2 focus-visible:ring-crema/40 disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted"
+      >
+        {children}
+      </select>
+      <svg viewBox="0 0 24 24" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mocha" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </span>
+  );
+}
+
 export function Button({ variant = "primary", className = "", ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "danger" | "ghost" }) {
   const styles = {
     primary: "bg-roast text-paper hover:bg-roast-hover",

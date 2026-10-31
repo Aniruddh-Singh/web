@@ -26,6 +26,7 @@ export function SiteFooter() {
           <p><a className="underline-offset-4 hover:text-paper hover:underline" href={`mailto:${business.email}`}>{business.email}</a></p>
           <p><a className="underline-offset-4 hover:text-paper hover:underline" href={business.social.instagram} target="_blank" rel="noopener noreferrer">Instagram: @thecoffeecatindia</a></p>
           <p><Link className="underline-offset-4 hover:text-paper hover:underline" href="/menu">Full menu</Link></p>
+          <p><Link className="underline-offset-4 hover:text-paper hover:underline" href="/credits">Photo credits</Link></p>
           <p><a className="underline-offset-4 hover:text-paper hover:underline" href={process.env.NEXT_PUBLIC_ADMIN_URL ?? "/"}>Staff login</a></p>
         </div>
       </div>

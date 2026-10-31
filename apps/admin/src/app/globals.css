@@ -2,26 +2,32 @@
 
 /* Same tokens as the customer site (apps/web/src/app/globals.css) so the brand matches. */
 :root {
-  --paper: #ffffff;
-  --surface: #f5f3f1;
-  --foam: #f6ecea;
-  --line: #e7e1dc;
-  --ink: #2b1a12;
-  --muted: #6e625b;
-  --roast: #7a2229;
-  --roast-hover: #5e1a20;
-  --crema: #e9a92e;
-  --crema-ink: #6b4700;
+  --paper: #fffdf9;
+  --cream: #f8f4ec;
+  --surface: #f1eadf;
+  --foam: #e7dccd;
+  --line: #e4d9ca;
+  --ink: #221813;
+  --coffee: #46322a;
+  --mocha: #775a47;
+  --muted: #6f5e52;
+  --roast: #5a3d2e;
+  --roast-hover: #46322a;
+  --crema: #b89772;
+  --crema-ink: #7a5a36;
   --veg: #0f8a3b;
   --nonveg: #b3261e;
   --egg: #c88a00;
   --ok: #1f7a43;
-  --warn-bg: #fdf6e7;
+  --warn-bg: #f6eddf;
   --danger-bg: #fbeceb;
 }
 
 @theme inline {
   --color-paper: var(--paper);
+  --color-cream: var(--cream);
+  --color-coffee: var(--coffee);
+  --color-mocha: var(--mocha);
   --color-surface: var(--surface);
   --color-foam: var(--foam);
   --color-line: var(--line);
@@ -38,11 +44,11 @@
   --color-warn-bg: var(--warn-bg);
   --color-danger-bg: var(--danger-bg);
   --font-sans: var(--font-figtree);
-  --font-display: var(--font-bricolage);
+  --font-display: var(--font-playfair);
 }
 
 body {
-  background: var(--surface);
+  background: var(--cream);
   color: var(--ink);
   font-family: var(--font-figtree), system-ui, sans-serif;
 }
@@ -54,8 +60,8 @@ body {
 }
 
 @keyframes arrive {
-  0% { box-shadow: 0 0 0 0 rgb(233 169 46 / 0.7); }
-  100% { box-shadow: 0 0 0 14px rgb(233 169 46 / 0); }
+  0% { box-shadow: 0 0 0 0 rgb(184 151 114 / 0.7); }
+  100% { box-shadow: 0 0 0 14px rgb(184 151 114 / 0); }
 }
 .animate-arrive { animation: arrive 1.2s ease-out 3; }
 

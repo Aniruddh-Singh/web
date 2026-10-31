@@ -54,9 +54,9 @@ export async function CategoryTiles() {
   return (
     <section id="categories" aria-labelledby="cats" className="mx-auto max-w-6xl scroll-mt-24 px-4">
       <SectionHead id="cats" eyebrow="Find your favourite" title="What are you craving?" href="/menu" cta="Full menu" />
-      <ul className="no-scrollbar -mx-4 mt-6 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-6">
+      <ul className="no-scrollbar -mx-4 mt-6 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-6">
         {categories.map((c, i) => (
-          <li key={c.id} className="w-28 shrink-0 sm:w-auto">
+          <li key={c.id} className="w-28 shrink-0 snap-start sm:w-auto">
             <Reveal delay={(i % 6) * 0.05} y={16}>
               <Link href={`/menu?category=${c.id}`} className="group block rounded-2xl border border-line bg-paper p-2 text-center transition hover:-translate-y-1 hover:border-crema hover:shadow-md">
                 <span className="relative block aspect-square overflow-hidden rounded-xl">
@@ -152,9 +152,9 @@ export function ReviewsSection() {
   return (
     <section aria-labelledby="reviews" className="mx-auto max-w-6xl px-4">
       <SectionHead id="reviews" eyebrow="Loved in Sector 77" title="What guests say" sub="Ratings from public listings." href={mapsUrl} cta="Read reviews" />
-      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <ul className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">
         {ratings.map((r) => (
-          <li key={r.source} className="rounded-2xl border border-line bg-paper p-4">
+          <li key={r.source} className="w-[42%] shrink-0 snap-start rounded-2xl border border-line bg-paper p-4 sm:w-auto">
             <p className="flex items-center gap-1.5 font-display text-3xl font-bold">
               {r.value}
               <StarIcon className="h-5 w-5" fill="var(--crema)" />

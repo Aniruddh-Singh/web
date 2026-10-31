@@ -70,6 +70,8 @@ body {
 
 .no-scrollbar {
   scrollbar-width: none;
+  /* Contain absolutely positioned children (e.g. sr-only labels) so they can't widen the page. */
+  position: relative;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -81,11 +83,12 @@ body {
  */
 :root {
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --bottom-nav: 64px;
+  /* Height of the phone tab bar including the iPhone home-indicator area; bars above it stack on this. */
+  --bottom-nav: calc(64px + env(safe-area-inset-bottom));
 }
 @media (min-width: 768px) {
   :root {
-    --bottom-nav: 0px;
+    --bottom-nav: env(safe-area-inset-bottom);
   }
 }
 
@@ -202,8 +205,10 @@ dialog.overlay::backdrop {
 }
 /* Sheets rise from the bottom on phones; on desktop the centred modal rises a few pixels and fades in. */
 .overlay-sheet { animation: sheet-up 320ms var(--ease-out); }
+.overlay-drawer { animation: sheet-up 320ms var(--ease-out); }
 @media (min-width: 768px) {
   .overlay-sheet { animation: zoom-in 260ms var(--ease-out); }
+  .overlay-drawer { animation: drawer-in 320ms var(--ease-out); }
 }
 .animate-drawer-in { animation: drawer-in 320ms var(--ease-out); }
 .animate-zoom-in { animation: zoom-in 260ms var(--ease-out); }

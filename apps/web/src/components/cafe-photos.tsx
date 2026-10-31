@@ -11,16 +11,15 @@ import { PhotoGallery, type GalleryPhoto } from "./photo-gallery";
 
 const handle = `@${business.social.instagram.split("/").filter(Boolean).pop()}`;
 
-/* Spans make a mosaic: big interior shot, tall portraits, one wide wall shot. */
 const photos: GalleryPhoto[] = [
-  { src: interior, alt: "The seating area with a hanging swing chair and the cake counter", span: "col-span-2 row-span-2" },
-  { src: swings, alt: "Rattan swing chairs by the window in evening light", span: "row-span-2" },
-  { src: storefront, alt: "The Coffee Cat's lit sign over the entrance at night", span: "row-span-2", position: "object-top" },
-  { src: logoWall, alt: "The cat roundel on the textured wall above the tables", span: "col-span-2", position: "object-[50%_30%]" },
-  { src: menuCard, alt: "The printed coffee menu", span: "row-span-2" },
-  { src: lemonade, alt: "Mint lemonade in a branded cup", span: "row-span-2" },
-  { src: latte, alt: "A latte in a Coffee Cat cup next to a laptop", span: "" },
-  { src: toast, alt: "Chilli cheese toast with bell peppers, mozzarella and green chillies", span: "" },
+  { src: interior, alt: "The seating area with a hanging swing chair and the cake counter" },
+  { src: swings, alt: "Rattan swing chairs by the window in evening light" },
+  { src: storefront, alt: "The Coffee Cat's lit sign over the entrance at night", position: "object-top" },
+  { src: logoWall, alt: "The cat roundel on the textured wall above the tables", position: "object-[50%_30%]" },
+  { src: menuCard, alt: "The printed coffee menu" },
+  { src: lemonade, alt: "Mint lemonade in a branded cup" },
+  { src: latte, alt: "A latte in a Coffee Cat cup next to a laptop" },
+  { src: toast, alt: "Chilli cheese toast with bell peppers, mozzarella and green chillies" },
 ];
 
 export function CafePhotos() {

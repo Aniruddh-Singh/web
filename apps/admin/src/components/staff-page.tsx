@@ -5,7 +5,7 @@ import { useState } from "react";
 import { api } from "@/lib/api";
 import { formError, useApi } from "@/lib/use-api";
 import { useStaff } from "./auth-provider";
-import { Button, Drawer, Field, inputClass, Notice, PageHeader } from "./ui";
+import { Button, Drawer, Field, Notice, PageHeader, Select, inputClass } from "./ui";
 
 const roleInfo: Record<StaffRole, string> = {
   owner: "Everything, including staff and the activity log",
@@ -71,11 +71,11 @@ export function StaffPage() {
             </span>
             <label className="text-sm">
               <span className="sr-only">Role for {m.email}</span>
-              <select value={m.role} disabled={!m.active || m.userId === me.id} onChange={(e) => void update(m, { role: e.target.value as StaffRole })} className={`${inputClass} mt-0 h-10 w-36`}>
+              <Select value={m.role} disabled={!m.active || m.userId === me.id} onChange={(e) => void update(m, { role: e.target.value as StaffRole })} className="mt-0 w-40">
                 <option value="owner">Owner</option>
                 <option value="manager">Manager</option>
                 <option value="kitchen">Kitchen</option>
-              </select>
+              </Select>
             </label>
             {m.userId !== me.id && (
               <Button variant={m.active ? "secondary" : "ghost"} className="h-10" onClick={() => void update(m, { active: !m.active })}>

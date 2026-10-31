@@ -96,9 +96,9 @@ function CartContents() {
             {suggestions.length > 0 && (
               <section aria-labelledby="cart-suggest" className="mt-5">
                 <h3 id="cart-suggest" className="font-display text-lg font-bold">Complete your meal</h3>
-                <ul className="no-scrollbar -mx-4 mt-2 flex gap-3 overflow-x-auto px-4 pb-1">
+                <ul className="no-scrollbar -mx-4 mt-2 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1">
                   {suggestions.map((s) => (
-                    <li key={s.id} className="w-36 shrink-0 rounded-2xl bg-paper p-2">
+                    <li key={s.id} className="w-36 shrink-0 snap-start rounded-2xl bg-paper p-2">
                       <button type="button" onClick={() => ui.openDish(s.id)} className="block w-full text-left">
                         <DishImage id={s.id} name={s.name} photo={menu.photoFor(s.id)} sizes="128px" className="aspect-square w-full rounded-xl" />
                         <span className="mt-1.5 block truncate text-sm font-semibold">{s.name}</span>

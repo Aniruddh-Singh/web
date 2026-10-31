@@ -16,11 +16,41 @@ const move = <T,>(list: T[], i: number, by: number) => {
   return next;
 };
 
+const chevron = (d: string) => (
+  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={d} />
+  </svg>
+);
+
+const reorderButton = "grid h-6 w-7 place-items-center rounded-md text-mocha transition-colors hover:bg-foam hover:text-ink disabled:pointer-events-none disabled:opacity-25";
+
+/** Move up / move down, stacked as one small segmented control. */
 function ReorderButtons({ onUp, onDown, first, last, label }: { onUp: () => void; onDown: () => void; first: boolean; last: boolean; label: string }) {
   return (
-    <span className="flex flex-col">
-      <button type="button" onClick={onUp} disabled={first} aria-label={`Move ${label} up`} className="rounded px-1 text-muted hover:text-ink disabled:opacity-20">▲</button>
-      <button type="button" onClick={onDown} disabled={last} aria-label={`Move ${label} down`} className="rounded px-1 text-muted hover:text-ink disabled:opacity-20">▼</button>
+    <span className="flex shrink-0 flex-col overflow-hidden rounded-lg border border-line bg-paper">
+      <button type="button" onClick={onUp} disabled={first} aria-label={`Move ${label} up`} title="Move up" className={reorderButton}>
+        {chevron("m6 15 6-6 6 6")}
+      </button>
+      <span className="h-px bg-line" aria-hidden="true" />
+      <button type="button" onClick={onDown} disabled={last} aria-label={`Move ${label} down`} title="Move down" className={reorderButton}>
+        {chevron("m6 9 6 6 6-6")}
+      </button>
+    </span>
+  );
+}
+
+/**
+ * Dish thumbnail: the cafe's uploaded photo, else the representative photo the website shows (dimmed, marked "Stand-in"),
+ * else the veg/non-veg mark when neither exists.
+ */
+function DishThumb({ src, fallback, foodType }: { src: string | null; fallback: string | null; foodType: AdminMenuItem["foodType"] }) {
+  const [failed, setFailed] = useState(false);
+  const shown = src ?? (failed ? null : fallback);
+  return (
+    <span className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-surface" title={src ? "Cafe photo" : shown ? "Stand-in photo shown on the website until you upload one" : undefined}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      {shown ? <img src={shown} alt="" onError={() => setFailed(true)} className={`h-full w-full object-cover ${src ? "" : "opacity-60"}`} /> : <FoodMark type={foodType} />}
+      {!src && shown && <span className="absolute inset-x-0 bottom-0 bg-ink/70 text-center text-[8px] font-bold uppercase leading-3 text-paper">Stand-in</span>}
     </span>
   );
 }
@@ -90,10 +120,7 @@ export function MenuManager() {
             onDown={() => run(() => api(`/admin/menu/sections/${sectionId}/items/order`, { method: "POST", json: { ids: move(list, index, 1).map((x) => x.id) } }))}
           />
         )}
-        <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-surface">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {src ? <img src={src} alt="" className="h-full w-full object-cover" /> : <FoodMark type={i.foodType} />}
-        </span>
+        <DishThumb src={src} fallback={photoSrc(`/images/dishes/${i.id}.jpg`)} foodType={i.foodType} />
         <span className="min-w-0 flex-1">
           <span className={`flex items-center gap-1.5 font-semibold ${i.isAvailable ? "" : "text-muted line-through"}`}>
             <FoodMark type={i.foodType} className="h-3 w-3" />

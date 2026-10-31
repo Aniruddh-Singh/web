@@ -50,6 +50,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#221813",
+  // Needed for env(safe-area-inset-*) so bars clear the iPhone home indicator.
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

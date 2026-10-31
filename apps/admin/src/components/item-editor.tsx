@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { uploadDishPhoto } from "@/lib/photo-upload";
 import { formError } from "@/lib/use-api";
 import { FoodMark } from "./food-mark";
-import { Button, Drawer, Field, inputClass, Notice, paiseToRupees, photoSrc, rupeesToPaise, Switch } from "./ui";
+import { Button, Drawer, Field, inputClass, Notice, paiseToRupees, photoSrc, rupeesToPaise, Select, Switch } from "./ui";
 
 type Draft = {
   name: string;
@@ -129,24 +129,19 @@ export function ItemEditor({
       <div className="space-y-5">
         {error && <Notice tone="error">{error}</Notice>}
 
-        <div className="flex items-center gap-4">
-          <div className="grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-2xl bg-surface">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            {src ? <img src={src} alt="" className="h-full w-full object-cover" /> : <span className="text-xs text-muted">No photo</span>}
-          </div>
-          <div className="space-y-2">
-            <label className={`inline-flex h-10 cursor-pointer items-center rounded-xl border border-line px-4 text-sm font-semibold hover:bg-surface ${busy === "photo" ? "opacity-50" : ""}`}>
-              {busy === "photo" ? "Uploading…" : d.imageUrl ? "Replace photo" : "Upload photo"}
-              <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" disabled={!!busy} onChange={(e) => void pickPhoto(e.target.files?.[0])} />
-            </label>
-            {d.imageUrl && (
-              <button type="button" onClick={() => set("imageUrl", null)} className="block text-sm font-semibold text-nonveg">
-                Remove photo
-              </button>
-            )}
-            <p className="text-xs text-muted">Only photos of this exact dish. Shrunk automatically.</p>
-          </div>
-        </div>
+        <PhotoPicker
+          src={src}
+          hasPhoto={!!d.imageUrl}
+          uploading={busy === "photo"}
+          disabled={!!busy}
+          onFile={(f) => void pickPhoto(f)}
+          onLink={(url) => {
+            setError(undefined);
+            set("imageUrl", url);
+          }}
+          onRemove={() => set("imageUrl", null)}
+          onError={setError}
+        />
 
         <Field label="Name" error={fields.name}>
           <input className={inputClass} value={d.name} onChange={(e) => set("name", e.target.value)} aria-invalid={!!fields.name} />
@@ -178,13 +173,13 @@ export function ItemEditor({
         </div>
 
         <Field label="Section">
-          <select className={inputClass} value={d.sectionId} onChange={(e) => set("sectionId", e.target.value)}>
+          <Select value={d.sectionId} onChange={(e) => set("sectionId", e.target.value)}>
             {sections.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.label}
               </option>
             ))}
-          </select>
+          </Select>
         </Field>
 
         <Field label="Note for customers" hint="(optional)">
@@ -222,5 +217,126 @@ export function ItemEditor({
           ))}
       </div>
     </Drawer>
+  );
+}
+
+/** Loads an image URL in the browser; resolves if it's a real, reachable image. */
+function probeImage(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const timer = window.setTimeout(() => reject(new Error("timeout")), 10_000);
+    img.onload = () => (window.clearTimeout(timer), img.naturalWidth ? resolve() : reject(new Error("empty")));
+    img.onerror = () => (window.clearTimeout(timer), reject(new Error("load")));
+    img.src = url;
+  });
+}
+
+/** Dish photo: upload a file (button or drag and drop) or paste a link to an image. */
+function PhotoPicker({
+  src,
+  hasPhoto,
+  uploading,
+  disabled,
+  onFile,
+  onLink,
+  onRemove,
+  onError,
+}: {
+  src: string | null;
+  hasPhoto: boolean;
+  uploading: boolean;
+  disabled: boolean;
+  onFile: (f: File | undefined) => void;
+  onLink: (url: string) => void;
+  onRemove: () => void;
+  onError: (msg: string | undefined) => void;
+}) {
+  const [mode, setMode] = useState<"upload" | "link">("upload");
+  const [link, setLink] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [dragging, setDragging] = useState(false);
+
+  const applyLink = async () => {
+    const url = link.trim();
+    if (!/^https:\/\/\S+$/i.test(url)) return onError("Paste a full image link starting with https://");
+    setChecking(true);
+    try {
+      await probeImage(url);
+      onLink(url);
+      setLink("");
+    } catch {
+      onError("Couldn't load an image from that link. Right-click the photo and choose “Copy image address”, then paste that.");
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  const tab = (m: "upload" | "link", label: string) => (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={mode === m}
+      onClick={() => setMode(m)}
+      className={`h-9 flex-1 rounded-lg text-sm font-semibold transition-colors ${mode === m ? "bg-paper text-ink shadow-sm" : "text-muted hover:text-ink"}`}
+    >
+      {label}
+    </button>
+  );
+
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+      <div
+        onDragOver={(e) => (e.preventDefault(), setDragging(true))}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          if (!disabled) onFile(e.dataTransfer.files?.[0]);
+        }}
+        className={`relative grid h-32 w-32 shrink-0 place-items-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors ${dragging ? "border-roast bg-foam" : src ? "border-transparent" : "border-line bg-surface"}`}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {src ? <img src={src} alt="Dish photo preview" className="h-full w-full object-cover" /> : (
+          <span className="px-3 text-center text-xs text-muted">{uploading ? "Uploading…" : "Drop a photo here"}</span>
+        )}
+        {uploading && src && <span className="absolute inset-0 grid place-items-center bg-ink/50 text-xs font-semibold text-paper">Uploading…</span>}
+      </div>
+
+      <div className="min-w-0 flex-1 space-y-3">
+        <div role="tablist" aria-label="Photo source" className="flex gap-1 rounded-xl bg-surface p-1">
+          {tab("upload", "Upload")}
+          {tab("link", "Paste link")}
+        </div>
+
+        {mode === "upload" ? (
+          <label className={`flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-line bg-paper px-4 text-sm font-semibold transition-colors hover:border-mocha hover:bg-surface ${disabled ? "pointer-events-none opacity-50" : ""}`}>
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
+            </svg>
+            {uploading ? "Uploading…" : hasPhoto ? "Choose another photo" : "Choose a photo"}
+            <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" disabled={disabled} onChange={(e) => onFile(e.target.files?.[0])} />
+          </label>
+        ) : (
+          <form className="flex gap-2" onSubmit={(e) => (e.preventDefault(), void applyLink())}>
+            <label className="sr-only" htmlFor="photo-link">
+              Image link
+            </label>
+            <input id="photo-link" type="url" inputMode="url" value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://…/photo.jpg" className={`${inputClass} mt-0 min-w-0 flex-1`} />
+            <Button type="submit" variant="secondary" disabled={checking || !link.trim()} className="shrink-0">
+              {checking ? "Checking…" : "Use link"}
+            </Button>
+          </form>
+        )}
+
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs text-muted">{mode === "upload" ? "JPG, PNG or WebP. Shrunk automatically." : "Use a link to the image itself, not a web page."} Only photos of this exact dish.</p>
+          {hasPhoto && (
+            <button type="button" onClick={onRemove} className="text-sm font-semibold text-nonveg hover:underline">
+              Remove photo
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

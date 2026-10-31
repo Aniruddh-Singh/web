@@ -14,7 +14,7 @@ const imageUrl = z
   .string()
   .trim()
   .max(500)
-  .refine((u) => u.startsWith("/") || u.startsWith("https://"), "Use an uploaded photo")
+  .refine((u) => u.startsWith("/") || u.startsWith("https://"), "Upload a photo or use an https:// image link")
   .nullable();
 
 export const categoryInput = z.object({ name, slug: slug.optional(), imageUrl: imageUrl.optional(), active: z.boolean().optional() });

@@ -8,7 +8,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   label: string;
-  /** "sheet": bottom sheet on phones, centred modal from md. "drawer": slides in from the right. "lightbox": full-screen media. */
+  /** "sheet": bottom sheet on phones, centred modal from md. "drawer": bottom sheet on phones, right-hand drawer from md. "lightbox": full-screen media. */
   variant: Variant;
   /** Let the content manage its own scrolling (e.g. a fixed photo above scrolling details). */
   contentScroll?: boolean;
@@ -22,8 +22,8 @@ const layout: Record<Variant, { wrap: string; panel: string }> = {
     panel: "overlay-sheet max-h-[92dvh] w-full rounded-t-3xl bg-paper md:max-h-[88dvh] md:max-w-4xl md:rounded-3xl",
   },
   drawer: {
-    wrap: "flex h-full justify-end",
-    panel: "animate-drawer-in flex h-full w-full max-w-md flex-col bg-cream shadow-2xl",
+    wrap: "flex h-full items-end md:items-stretch md:justify-end",
+    panel: "overlay-drawer flex h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-cream shadow-2xl md:h-full md:max-w-md md:rounded-none",
   },
   lightbox: {
     wrap: "flex h-full items-center justify-center bg-ink/90 p-3 sm:p-8",
@@ -31,10 +31,11 @@ const layout: Record<Variant, { wrap: string; panel: string }> = {
   },
 };
 
-/** Exit motion mirrors the entrance: sheets drop back down (fade-sink on desktop), the drawer slides right. */
+/** Exit motion mirrors the entrance: on phones sheets and the cart drop back down; on desktop the drawer slides right, the modal fades. */
 function exitKeyframes(variant: Variant): Keyframe[] {
-  if (variant === "drawer") return [{ transform: "translateX(0)" }, { transform: "translateX(100%)" }];
-  if (variant === "sheet" && !window.matchMedia("(min-width: 768px)").matches) return [{ transform: "translateY(0)" }, { transform: "translateY(100%)" }];
+  const desktop = window.matchMedia("(min-width: 768px)").matches;
+  if (variant === "drawer" && desktop) return [{ transform: "translateX(0)" }, { transform: "translateX(100%)" }];
+  if (variant !== "lightbox" && !desktop) return [{ transform: "translateY(0)" }, { transform: "translateY(100%)" }];
   return [{ opacity: 1, transform: "translateY(0)" }, { opacity: 0, transform: "translateY(12px)" }];
 }
 

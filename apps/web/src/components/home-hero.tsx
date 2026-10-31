@@ -37,18 +37,23 @@ export function HomeHero() {
         </div>
 
         <div className="md:order-1">
-          <p className="animate-rise mt-2 inline-flex items-center gap-1.5 rounded-full border border-crema/40 px-3 py-1.5 text-xs font-semibold text-crema md:mt-0">
-            {pin} Delivering around Sector 77, Noida
-          </p>
-          <h1 id="hero-title" className="animate-rise mt-4 font-display text-[2.35rem] font-bold leading-[1.08] [animation-delay:80ms] sm:text-5xl lg:text-6xl">
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="animate-rise mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-crema/40 px-3 py-1.5 text-xs font-semibold text-crema transition-colors hover:bg-crema/10 md:mt-0"
+          >
+            {pin} Sector 77, Noida · Get directions <ChevronRight className="h-3.5 w-3.5" />
+          </a>
+          <h1 id="hero-title" className="animate-rise mt-4 max-w-[13ch] font-display text-[2.35rem] font-bold leading-[1.08] [animation-delay:80ms] sm:text-5xl lg:text-6xl">
             Cold coffee, warm swings and <span className="italic text-crema">a cat on every cup.</span>
           </h1>
-          <p className="animate-rise mt-4 max-w-md text-base leading-relaxed text-foam/85 [animation-delay:160ms] sm:text-lg">
+          <p className="animate-rise mt-4 max-w-sm text-base leading-relaxed text-foam/85 [animation-delay:160ms] sm:text-lg">
             Your favourite coffee corner, just a click away. Momos, pizzas and comfort food too, delivered or ready for pickup.
           </p>
 
           <div className="animate-rise mt-6 grid grid-cols-2 gap-3 [animation-delay:240ms] sm:flex">
-            <Link href="/menu" className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-crema px-6 font-bold text-ink transition-colors hover:bg-[#c9a985] active:scale-[0.98]">
+            <Link href="/menu" className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-crema px-7 font-bold text-ink shadow-[0_10px_24px_rgba(184,151,114,0.35)] transition-colors hover:bg-[#c9a985] active:scale-[0.98]">
               Order now <ChevronRight className="h-4.5 w-4.5" />
             </Link>
             <Link href="#categories" className="flex h-12 items-center justify-center rounded-xl border border-crema/50 px-6 font-semibold text-paper transition-colors hover:bg-paper/10 active:scale-[0.98]">

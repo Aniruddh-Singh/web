@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 import { formatINR, type MenuItem } from "@/lib/menu";
 import { DishImage } from "./dish-image";
 import { DishLink } from "./dish-link";
@@ -22,7 +24,7 @@ export function DishTile({ item, query, compact = false, className = "" }: { ite
             name={item.name}
             photo={menu.photoFor(item.id)}
             sizes="(min-width: 1024px) 260px, (min-width: 640px) 33vw, 50vw"
-            className={`${compact ? "aspect-square sm:aspect-[4/3]" : "aspect-[4/3]"} w-full [&_img]:transition-transform [&_img]:duration-700 group-hover:[&_img]:scale-105`}
+            className={`aspect-square w-full [&_img]:transition-transform [&_img]:duration-700 group-hover:[&_img]:scale-105`}
           />
         </DishLink>
         {item.recommended && (
@@ -42,10 +44,8 @@ export function DishTile({ item, query, compact = false, className = "" }: { ite
           </h3>
         </div>
         {item.description && (
-          // Compact (carousel) cards drop the description on phones to keep the card short.
-          <div className={compact ? "hidden sm:block" : ""}>
-            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted sm:text-[13px]">{item.description}</p>
-          </div>
+          // Carousel cards keep the description to one line so the rail stays short.
+          <p className={`mt-1 text-xs leading-relaxed text-muted sm:text-[13px] ${compact ? "truncate" : "line-clamp-2"}`}>{item.description}</p>
         )}
         <div className="mt-auto flex flex-col gap-2 pt-3 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-bold">{formatINR(item.price)}</span>
@@ -56,23 +56,57 @@ export function DishTile({ item, query, compact = false, className = "" }: { ite
   );
 }
 
-/** Dish tiles: a 2–4 column grid, or ("rail") a swipeable carousel on phones that becomes the grid from sm. */
+/** Dish tiles: a 2–4 column grid, or ("rail") a swipeable carousel with a progress bar on phones that becomes the grid from sm. */
 export function DishGrid({ items, query, label, layout = "grid" }: { items: MenuItem[]; query?: string; label?: string; layout?: "grid" | "rail" }) {
   const rail = layout === "rail";
+  const ref = useRef<HTMLUListElement>(null);
+  const progress = useScrollProgress(ref, rail);
   return (
-    <ul
-      className={
-        rail
-          ? "no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
-          : "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
-      }
-      aria-label={label}
-    >
-      {items.map((i) => (
-        <li key={i.id} className={rail ? "w-[44%] shrink-0 snap-start sm:w-auto" : undefined}>
-          <DishTile item={i} query={query} compact={rail} />
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ul
+        ref={ref}
+        className={
+          rail
+            ? "no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+            : "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
+        }
+        aria-label={label}
+      >
+        {items.map((i) => (
+          <li key={i.id} className={rail ? "w-[46%] shrink-0 snap-start sm:w-auto" : undefined}>
+            <DishTile item={i} query={query} compact={rail} />
+          </li>
+        ))}
+      </ul>
+      {rail && progress && (
+        <div className="mx-auto mt-2 h-1 w-16 overflow-hidden rounded-full bg-foam sm:hidden" aria-hidden="true">
+          <div className="h-full rounded-full bg-mocha transition-[margin] duration-150" style={{ width: `${progress.size * 100}%`, marginLeft: `${progress.offset * 100}%` }} />
+        </div>
+      )}
+    </div>
   );
+}
+
+/** Visible share and position of a horizontal scroller, for a swipe indicator; null when nothing overflows. */
+function useScrollProgress(ref: React.RefObject<HTMLElement | null>, enabled: boolean) {
+  const [state, setState] = useState<{ size: number; offset: number } | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !enabled) return;
+    const update = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = el;
+      if (scrollWidth <= clientWidth + 1) return setState(null);
+      const size = clientWidth / scrollWidth;
+      setState({ size, offset: (scrollLeft / (scrollWidth - clientWidth)) * (1 - size) });
+    };
+    const raf = requestAnimationFrame(update);
+    el.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [ref, enabled]);
+  return state;
 }

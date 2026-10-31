@@ -12,7 +12,7 @@ export function OffersRail({ offers }: { offers: Offer[] }) {
   if (!offers.length) return null;
   return (
     <>
-      <ul className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1" aria-label="Offers">
+      <ul className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-1" aria-label="Offers">
         {offers.map((o) => (
           <li key={o.id} className="snap-start">
             <OfferTicket offer={o} onDetails={() => setOpen(o)} />
@@ -41,33 +41,40 @@ function useCopy(text?: string) {
   return { copied, copy };
 }
 
+/** Compact ticket: value stamp | condition + code | Copy. ~76px tall. */
 function OfferTicket({ offer, onDetails }: { offer: Offer; onDetails: () => void }) {
   const { copied, copy } = useCopy(offer.code);
   return (
-    <div className="flex h-full w-[300px] items-center gap-3 rounded-2xl border border-dashed border-crema bg-paper py-3 pl-4 pr-3 sm:w-[340px]">
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-ink font-display text-lg font-bold text-crema" aria-hidden="true">
-        %
+    <div className="relative flex h-full w-[min(84vw,320px)] items-stretch overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_1px_2px_rgba(34,24,19,0.05)]">
+      <span className="relative flex w-[76px] shrink-0 flex-col items-center justify-center bg-ink px-2 text-center text-paper" aria-hidden="true">
+        <span className={`font-display font-bold leading-none text-crema ${offer.value.length > 3 ? "text-lg" : "text-2xl"}`}>{offer.value}</span>
+        <span className="mt-1 text-[9px] font-bold tracking-[0.15em] text-foam/80">{offer.unit}</span>
+        {/* Ticket notches. */}
+        <span className="absolute -right-1.5 -top-1.5 h-3 w-3 rounded-full bg-cream" />
+        <span className="absolute -bottom-1.5 -right-1.5 h-3 w-3 rounded-full bg-cream" />
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-semibold leading-snug">{offer.title}</span>
-        <span className="block text-sm text-muted">
-          {offer.detail}
-          {offer.code && <strong className="ml-1 font-mono tracking-wider text-ink">{offer.code}</strong>}
+      <span className="flex min-w-0 flex-1 flex-col justify-center border-l border-dashed border-line py-2.5 pl-3 pr-2">
+        <span className="sr-only">{offer.title}. </span>
+        <span className="truncate text-sm font-semibold" aria-hidden="true">
+          {offer.condition}
         </span>
-        <button type="button" onClick={onDetails} aria-haspopup="dialog" className="-ml-1 mt-0.5 rounded px-1 py-1 text-xs font-semibold text-roast underline-offset-2 hover:underline">
-          Details &amp; T&amp;Cs
-        </button>
+        <span className="mt-0.5 flex items-center gap-2 text-xs text-muted">
+          {offer.code ? <strong className="font-mono text-[13px] tracking-wider text-ink">{offer.code}</strong> : "No code needed"}
+          <button type="button" onClick={onDetails} aria-haspopup="dialog" className="-my-2 py-2 font-semibold text-roast underline-offset-2 hover:underline">
+            T&amp;Cs
+          </button>
+        </span>
       </span>
       {offer.code && (
         <button
           type="button"
           onClick={copy}
-          className={`flex h-11 shrink-0 items-center gap-1 rounded-xl px-3 text-sm font-bold transition-colors ${copied ? "bg-ok text-paper" : "bg-foam text-ink hover:bg-crema"}`}
+          className={`m-2 flex w-[68px] shrink-0 items-center justify-center gap-1 rounded-xl text-sm font-bold transition-colors ${copied ? "bg-ok text-paper" : "bg-foam text-ink hover:bg-crema"}`}
           aria-label={copied ? `Copied ${offer.code}` : `Copy code ${offer.code}`}
         >
           {copied ? (
             <>
-              <CheckIcon /> Copied
+              <CheckIcon /> Done
             </>
           ) : (
             "Copy"

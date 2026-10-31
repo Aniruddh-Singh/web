@@ -1,4 +1,5 @@
 import type { MenuResponse } from "@coffeecat/shared";
+import dishPhotoIds from "@/data/dish-photos.json";
 
 /*
  * Menu helpers built from the API's /menu response. Works on the server and in the browser.
@@ -54,6 +55,9 @@ const sectionStockPhoto: Record<string, string> = {
   desserts: "/images/desserts.jpg",
 };
 
+/** Dishes with a bundled, openly licensed photo at /images/dishes/<id>.jpg (credits on /credits). */
+const dishPhotos = new Set<string>(dishPhotoIds);
+
 const drinkCategories = new Set(["coffee", "drinks"]);
 const preferredDrinks = ["cold-coffee", "cappuccino", "cafe-latte", "mint-lemonade", "choco-frappe", "devil-s-frappe"];
 
@@ -102,20 +106,17 @@ export class MenuIndex {
   imageForCategory = (id: string) => this.getCategory(id)?.imageUrl ?? undefined;
   hasOwnPhoto = (id: string) => Boolean(this.byId.get(id)?.item.imageUrl);
 
-  /** Best photo for a dish: its own photo, else a representative stock photo for its section. */
+  /** Best photo for a dish: the cafe's own, else its representative dish photo, else its section's stock photo. */
   photoFor = (id: string): DishPhoto | undefined => {
     const ctx = this.byId.get(id);
     if (!ctx) return undefined;
     if (ctx.item.imageUrl) return { src: ctx.item.imageUrl, real: true };
+    if (dishPhotos.has(id)) return { src: `/images/dishes/${id}.jpg`, real: false };
     const stock = sectionStockPhoto[ctx.section.id];
     return stock ? { src: stock, real: false } : undefined;
   };
 
-  /** Thumbnail for list rows: own photo always, stock only for bestsellers (keeps lists scannable, like the food apps). */
-  listPhotoFor = (item: MenuItem): DishPhoto | undefined => {
-    if (item.imageUrl) return { src: item.imageUrl, real: true };
-    return item.recommended ? this.photoFor(item.id) : undefined;
-  };
+  listPhotoFor = (item: MenuItem): DishPhoto | undefined => this.photoFor(item.id);
 
   private isDrink = (id: string) => drinkCategories.has(this.byId.get(id)?.category.id ?? "");
 
